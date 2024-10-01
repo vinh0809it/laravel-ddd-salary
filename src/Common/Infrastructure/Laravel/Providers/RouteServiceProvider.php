@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Providers;
+namespace Src\Common\Infrastructure\Laravel\Providers;
 
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;

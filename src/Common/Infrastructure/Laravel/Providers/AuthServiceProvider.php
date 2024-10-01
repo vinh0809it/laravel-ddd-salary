@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Providers;
+namespace Src\Common\Infrastructure\Laravel\Providers;
 
 // use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;

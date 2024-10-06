@@ -5,6 +5,16 @@ use Illuminate\Http\Request;
 
 define('LARAVEL_START', microtime(true));
 
+if (!function_exists('pr'))
+{
+    function pr($data)
+    {
+        echo "<pre>";
+        print_r($data);
+        echo "</pre>";die;
+    }
+}
+
 /*
 |--------------------------------------------------------------------------
 | Check If The Application Is Under Maintenance

@@ -168,6 +168,13 @@ return [
         // Src\Common\Infrastructure\Laravel\Providers\BroadcastServiceProvider::class,
         Src\Common\Infrastructure\Laravel\Providers\EventServiceProvider::class,
         Src\Common\Infrastructure\Laravel\Providers\RouteServiceProvider::class,
+
+        /*
+         * Domain Service Providers...
+         */
+        \Src\Common\Application\Providers\AuthorizationServiceProvider::class,
+        \Src\User\Application\Providers\UserServiceProvider::class,
+
     ])->toArray(),
 
     /*

@@ -1,13 +1,9 @@
 <?php
-
-declare(strict_types=1);
-
 namespace Src\User\Domain\Model\ValueObjects;
 
 use Src\Common\Domain\Exceptions\RequiredException;
-use Src\Common\Domain\ValueObject;
 
-final class Name extends ValueObject
+final class Name
 {
     private string $name;
 

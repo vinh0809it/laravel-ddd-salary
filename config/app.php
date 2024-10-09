@@ -172,8 +172,15 @@ return [
         /*
          * Domain Service Providers...
          */
+        
+        //  Common
         \Src\Common\Application\Providers\AuthorizationServiceProvider::class,
+
+        // User
         \Src\User\Application\Providers\UserServiceProvider::class,
+
+        // SalaryHistory
+        \Src\SalaryHistory\Application\Providers\SalaryHistoryServiceProvider::class,
 
     ])->toArray(),
 

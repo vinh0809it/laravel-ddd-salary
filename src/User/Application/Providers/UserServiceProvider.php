@@ -5,10 +5,11 @@ namespace Src\User\Application\Providers;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
-use Src\User\Application\Listeners\StoreUserListener;
+use Src\User\Infrastructure\Listeners\StoreUserListener;
 use Src\User\Domain\Events\StoreUserEvent;
 use Src\User\Domain\Policies\UserPolicy;
-use Src\User\Domain\Repositories\UserRepositoryInterface;
+use Src\User\Domain\Repositories\IUserRepository;
+use Src\User\Domain\Rules\EmailUniqueRule;
 use Src\User\Infrastructure\Repositories\UserRepository;
 
 class UserServiceProvider extends ServiceProvider
@@ -16,9 +17,14 @@ class UserServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton(
-            UserRepositoryInterface::class,
+            IUserRepository::class,
             UserRepository::class
         );
+
+        // Rule injection
+        $this->app->singleton(EmailUniqueRule::class, function ($app) {
+            return new EmailUniqueRule($app->make(IUserRepository::class));
+        });
     }
 
     public function boot() 

@@ -1,25 +1,18 @@
 <?php
-
 namespace Src\User\Application\UseCases\Commands;
 
-use Src\User\Domain\Factories\UserFactory;
-use Src\User\Domain\Repositories\UserRepositoryInterface;
-use Src\Common\Domain\CommandInterface;
 use Src\User\Application\DTOs\UserDTO;
-use Src\User\Domain\Model\ValueObjects\Name;
+use Src\User\Domain\Services\UserService;
 
-class UpdateUserCommand implements CommandInterface
+class UpdateUserCommand
 {
     public function __construct(
-        private UserFactory $userFactory,
-        private UserRepositoryInterface $userRepository
+        private UserService $userService
     )
     {}
 
     public function execute(UserDTO $userDTO): void
     {
-        $existingUser = $this->userRepository->findUserById($userDTO->id);
-        $existingUser->changeName(new Name($userDTO->name));
-        $this->userRepository->updateUser($existingUser);
+        $this->userService->updateUser($userDTO);
     }
 }

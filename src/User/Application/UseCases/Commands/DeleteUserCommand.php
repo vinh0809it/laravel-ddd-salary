@@ -1,23 +1,17 @@
 <?php
-
 namespace Src\User\Application\UseCases\Commands;
 
-use Src\User\Domain\Factories\UserFactory;
-use Src\User\Domain\Repositories\UserRepositoryInterface;
-use Src\Common\Domain\CommandInterface;
-use Src\User\Application\DTOs\UserDTO;
-use Src\User\Domain\Model\ValueObjects\Name;
+use Src\User\Domain\Services\UserService;
 
-class DeleteUserCommand implements CommandInterface
+class DeleteUserCommand
 {
     public function __construct(
-        private UserFactory $userFactory,
-        private UserRepositoryInterface $userRepository
+        private UserService $userService
     )
     {}
 
     public function execute(string $id): void
     {
-        $this->userRepository->deleteUser($id);
+        $this->userService->deleteUser($id);
     }
 }

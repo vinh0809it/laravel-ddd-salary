@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace Src\User\Domain\Model\ValueObjects;
 
 use Src\User\Domain\Exceptions\PasswordTooShortException;
-use Src\Common\Domain\ValueObject;
 
-final class Password extends ValueObject
+final class Password
 {
     public function __construct(private ?string $password = null)
     {

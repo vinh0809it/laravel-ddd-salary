@@ -3,12 +3,10 @@ namespace Src\User\Presentation\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Contracts\Validation\Validator;
-use Src\User\Domain\Repositories\UserRepositoryInterface;
-use Src\User\Domain\Rules\EmailUnique;
+use Src\User\Domain\Rules\EmailUniqueRule;
 
 class StoreUserRequest extends FormRequest
 {
-
     protected function failedValidation(Validator $validator)
     {
         $errors = $validator->errors();
@@ -25,7 +23,7 @@ class StoreUserRequest extends FormRequest
         return true;
     }
 
-    public function rules(): array
+    public function rules(EmailUniqueRule $emailUniqueRule): array
     {
         return [
             "email" => [
@@ -34,7 +32,7 @@ class StoreUserRequest extends FormRequest
                 "string",
                 "email",
                 "max:100",
-                new EmailUnique(app(UserRepositoryInterface::class)),
+                $emailUniqueRule,
             ],
             "name" => ["bail", "required", "max:100"],
         ];
@@ -43,8 +41,8 @@ class StoreUserRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'email.*' => __('Email không hợp lệ'),
-            'name.*' => __('Tên không hợp lệ'),
+            'email.*' => __('Email is not valid'),
+            'name.*' => __('Name is not valid'),
         ];
     }
 }

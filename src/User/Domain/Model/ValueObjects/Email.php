@@ -1,14 +1,9 @@
 <?php
-
-declare(strict_types=1);
-
 namespace Src\User\Domain\Model\ValueObjects;
 
 use Src\Common\Domain\Exceptions\IncorrectEmailFormatException;
-use Src\Common\Domain\Exceptions\RequiredException;
-use Src\Common\Domain\ValueObject;
 
-final class Email extends ValueObject
+final class Email
 {
 
     public function __construct(private string $email)

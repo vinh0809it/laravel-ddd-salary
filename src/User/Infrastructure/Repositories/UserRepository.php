@@ -6,10 +6,10 @@ use Illuminate\Support\Collection;
 use Src\User\Domain\Factories\UserFactory;
 use Src\Common\Infrastructure\BaseRepository;
 use Src\User\Domain\Model\User;
-use Src\User\Domain\Repositories\UserRepositoryInterface;
+use Src\User\Domain\Repositories\IUserRepository;
 use Src\User\Infrastructure\EloquentModels\UserEloquentModel;
 
-class UserRepository extends BaseRepository implements UserRepositoryInterface
+class UserRepository extends BaseRepository implements IUserRepository
 {
 
     public function getModel(): string
@@ -55,6 +55,11 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     public function emailExists(string $email): bool
     {
         return $this->model->where('email', $email)->exists();
+    }
+
+    public function userExists(string $id): bool
+    {
+        return $this->model->where('id', $id)->exists();
     }
 
     public function storeUser(User $user): User

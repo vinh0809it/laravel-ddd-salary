@@ -6,15 +6,16 @@ namespace Src\User\Domain\Repositories;
 
 use Illuminate\Support\Collection;
 use Src\User\Domain\Model\User;
-use Src\User\Domain\Model\ValueObjects\Password;
 
-interface UserRepositoryInterface
+interface IUserRepository
 {
     public function getUsers(?string $email, ?string $name): Collection;
 
     public function findUserById(string $userId): User;
 
     public function emailExists(string $email): bool;
+
+    public function userExists(string $id): bool;
 
     public function storeUser(User $user): User;
 

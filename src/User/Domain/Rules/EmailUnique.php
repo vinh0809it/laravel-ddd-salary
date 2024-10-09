@@ -4,14 +4,13 @@ namespace Src\User\Domain\Rules;
 
 use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
-use Src\User\Domain\Repositories\UserRepositoryInterface;
+use Src\User\Domain\Repositories\IUserRepository;
 
-class EmailUnique implements ValidationRule
+class EmailUniqueRule implements ValidationRule
 {
 
-    public function __construct(protected UserRepositoryInterface $userRepository)
-    {
-    }
+    public function __construct(protected IUserRepository $userRepository)
+    {}
 
     /**
      * Run the validation rule.

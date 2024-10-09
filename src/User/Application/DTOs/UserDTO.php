@@ -46,7 +46,7 @@ class UserDTO
         );
     }
 
-    public static function toRequest(mixed $entities): array
+    public static function toResponse(mixed $entities): array
     {
         if(!($entities instanceof Collection)) {
             $entities = [$entities];

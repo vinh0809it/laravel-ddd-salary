@@ -2,6 +2,8 @@
 
 namespace Src\User\Infrastructure\EloquentModels;
 
+use Database\Factories\User\UserEloquentModelFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -10,9 +12,14 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class UserEloquentModel extends Authenticatable implements JWTSubject
 {
-    use HasApiTokens, Notifiable;
+    use HasApiTokens, Notifiable, HasFactory;
 
     protected $table = 'users';
+
+    protected static function newFactory()
+    {
+        return UserEloquentModelFactory::new();
+    }
 
     /**
      * The attributes that are mass assignable.

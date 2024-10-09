@@ -1,7 +1,6 @@
 <?php
 namespace Src\SalaryHistory\Domain\Factories;
 
-use Exception;
 use Src\Common\Domain\Exceptions\FactoryException;
 use Src\Common\Domain\ValueObjects\Date;
 use Src\SalaryHistory\Domain\Model\ValueObjects\Salary;

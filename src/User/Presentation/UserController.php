@@ -1,15 +1,15 @@
 <?php
-
 namespace Src\User\Presentation;
 
 use DomainException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Src\Common\Domain\Exceptions\UnauthorizedUserException;
 use Src\User\Application\UseCases\Commands\StoreUserCommand;
 use Src\User\Application\UseCases\Commands\UpdateUserCommand;
 use Src\Common\Domain\Services\AuthorizationServiceInterface;
-use Src\Common\Infrastructure\Laravel\Controller;
+use Src\Common\Presentation\BaseController;
 use Src\User\Application\DTOs\UserDTO;
 use Src\User\Application\UseCases\Commands\DeleteUserCommand;
 use Src\User\Application\UseCases\Queries\GetUsersQuery;
@@ -19,7 +19,7 @@ use Src\User\Presentation\Requests\UpdateUserRequest;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
-class UserController extends Controller
+class UserController extends BaseController
 {
 
     public function __construct( private AuthorizationServiceInterface $authorizationService) {
@@ -41,14 +41,13 @@ class UserController extends Controller
             $users = $getUsersQuery->handle($request->email, $request->name);
             $response = UserDTO::toResponse($users);
 
-            return response()->json($response, Response::HTTP_OK);
+            return $this->sendResponse(
+                result: $response,
+            );
 
-        } catch (DomainException $domainException) {
-            
-            return response()->json(['errors' => $domainException->getMessage()], Response::HTTP_UNPROCESSABLE_ENTITY);
         } catch (Throwable $e) {
-
-            return response()->json(['errors' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+            
+            return $this->handleException($e);
         }
     }
 
@@ -66,15 +65,15 @@ class UserController extends Controller
             $userDTO = UserDTO::fromRequest($request);
             $user = $storeUserCommand->execute($userDTO);
             $response = UserDTO::toResponse($user);
+          
+            return $this->sendResponse(
+                result: $response, 
+                httpCode: Response::HTTP_CREATED, 
+            );
 
-            return response()->json($response, Response::HTTP_CREATED);
-
-        } catch (DomainException $domainException) {
-            
-            return response()->json(['errors' => $domainException->getMessage()], Response::HTTP_UNPROCESSABLE_ENTITY);
         } catch (Throwable $e) {
-
-            return response()->json(['errors' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+            
+            return $this->handleException($e);
         }
     }
 
@@ -91,15 +90,13 @@ class UserController extends Controller
 
         try {
             $userDTO = UserDTO::fromRequest($request, $id);
-            $result = $updateUserCommand->execute($userDTO);
-            return response()->json($result, Response::HTTP_OK);
+            $updateUserCommand->execute($userDTO);
 
-        } catch (DomainException $domainException) {
-            
-            return response()->json(['errors' => $domainException->getMessage()], Response::HTTP_UNPROCESSABLE_ENTITY);
+            return $this->sendResponse();
+
         } catch (Throwable $e) {
 
-            return response()->json(['errors' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->handleException($e);
         }
     }
 
@@ -114,14 +111,12 @@ class UserController extends Controller
         $this->authorizationService->authorize('user.delete');
 
         try {
-            $result = $deleteUserCommand->execute($id);
-            return response()->json($result, Response::HTTP_NO_CONTENT);
-        } catch (DomainException $domainException) {
-            
-            return response()->json(['errors' => $domainException->getMessage()], Response::HTTP_UNPROCESSABLE_ENTITY);
-        } catch (Throwable $e) {
+            $deleteUserCommand->execute($id);
+            return $this->sendResponse(httpCode: Response::HTTP_NO_CONTENT);
 
-            return response()->json(['errors' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+        } catch (Throwable $e) {
+            
+            return $this->handleException($e);
         }
     }
 }

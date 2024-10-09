@@ -34,8 +34,18 @@ class UserEloquentModelFactory extends Factory
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
             'is_active' => true,
-            'is_admin' => true,
+            'is_admin' => false,
         ];
+    }
+
+    /**
+     * @return Factory
+     */
+    public function admin(): Factory
+    {
+        return $this->state([
+            'is_admin' => true,
+        ]);
     }
 
     /**

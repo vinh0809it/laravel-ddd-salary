@@ -11,6 +11,16 @@ use Throwable;
 
 class UserFactory
 {
+    /**
+     * @param string|null $id
+     * @param string $name
+     * @param string $email
+     * @param string $password
+     * @param bool $isAdmin
+     * @param bool $isActive
+     * 
+     * @return User
+     */
     public function create(?string $id, string $name, string $email, string $password, bool $isAdmin, bool $isActive): User
     {
         try {
@@ -28,6 +38,11 @@ class UserFactory
         }
     }
 
+    /**
+     * @param UserEloquentModel $userEloquent
+     * 
+     * @return User
+     */
     public function fromEloquent(UserEloquentModel $userEloquent): User
     {
         try {

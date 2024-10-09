@@ -8,7 +8,7 @@ use Mockery;
 use Src\User\Infrastructure\EloquentModels\UserEloquentModel;
 use Tests\TestCase;
 
-class StoreSalaryHistoryControllerTest extends TestCase
+class StoreSalaryHistoryTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -23,7 +23,7 @@ class StoreSalaryHistoryControllerTest extends TestCase
     public function test_store_salary_history_successfully(): void
     {
         // Arrange
-        $user = UserEloquentModel::factory()->create();
+        $user = UserEloquentModel::factory()->admin()->create();
         $this->actingAs($user);
      
         $request = [
@@ -72,7 +72,7 @@ class StoreSalaryHistoryControllerTest extends TestCase
     public function test_store_salary_history_unauthorized(): void
     {
         // Arrange
-        $user = UserEloquentModel::factory()->create(['is_admin' => false]);
+        $user = UserEloquentModel::factory()->create();
         $this->actingAs($user);
 
         $request = [
@@ -92,7 +92,7 @@ class StoreSalaryHistoryControllerTest extends TestCase
     public function test_store_salary_history_invalid_format(): void
     {
         // Arrange
-        $user = UserEloquentModel::factory()->create();
+        $user = UserEloquentModel::factory()->admin()->create();
         $this->actingAs($user);
 
         $request = [

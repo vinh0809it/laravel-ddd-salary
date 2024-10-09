@@ -2,12 +2,28 @@
 
 namespace Src\Common\Presentation;
 
+use DomainException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
+use Src\Common\Domain\Exceptions\UnauthorizedUserException;
 use Src\Common\Infrastructure\Laravel\Controller;
+use Throwable;
 
 class BaseController extends Controller
 {
+    protected function handleException(Throwable $e): JsonResponse
+    {
+        if ($e instanceof DomainException) {
+            return $this->sendError(msg: $e->getMessage(), httpCode: Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        if ($e instanceof UnauthorizedUserException) {
+            return $this->sendError(msg: $e->getMessage(), httpCode: Response::HTTP_UNAUTHORIZED);
+        }
+
+        return $this->sendError(msg: 'Something went wrong.', httpCode: Response::HTTP_INTERNAL_SERVER_ERROR);
+    }
+
     /**
      * @param array $result
      * @param string $message
@@ -15,7 +31,7 @@ class BaseController extends Controller
      * 
      * @return JsonResponse
      */
-    public function sendResponse(array $result, string $message = "", int $httpCode = Response::HTTP_OK): JsonResponse
+    public function sendResponse(?array $result = [], string $message = "", int $httpCode = Response::HTTP_OK): JsonResponse
     {
         $response = [
             'data'    => $result,
@@ -26,23 +42,17 @@ class BaseController extends Controller
     }
 
     /**
-     * return error response.
-     *
-     * @param $error
-     * @param array $errorMessages
+     * @param string $msg
+     * @param array|null $errors
      * @param int $httpCode
-     * @return Response
+     * 
+     * @return JsonResponse
      */
-    public function sendError($error, $errorMessages = [], int $httpCode = 500)
+    public function sendError(string $msg, ?array $errors = [], int $httpCode = 500): JsonResponse
     {
-        $response = [
-            'message' => $error,
-        ];
-        
-        if(!empty($errorMessages)){
-            $response['data'] = $errorMessages;
-        }
+        $response['message'] = $msg;
+        $response['data'] = $errors;
 
-        return response($response, $httpCode);
+        return response()->json($response, $httpCode);
     }
 }

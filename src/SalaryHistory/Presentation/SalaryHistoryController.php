@@ -40,12 +40,9 @@ class SalaryHistoryController extends BaseController
                 httpCode: Response::HTTP_CREATED, 
             );
 
-        } catch (DomainException $domainException) {
-            
-            return response()->json(['errors' => $domainException->getMessage()], Response::HTTP_UNPROCESSABLE_ENTITY);
         } catch (Throwable $e) {
             
-            return response()->json(['errors' => $e->getMessage()], Response::HTTP_UNAUTHORIZED);
+            return $this->handleException($e);
         }
     }
 }

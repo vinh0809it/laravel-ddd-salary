@@ -68,7 +68,7 @@ class UserService
     public function updateUser(UserDTO $userDTO): void
     {
         try {
-            $existingUser = $this->userRepository->find($userDTO->id);
+            $existingUser = $this->userRepository->findUserById($userDTO->id);
 
             if($userDTO->email) {
                 $existingUser->changeEmail(new Email($userDTO->email));

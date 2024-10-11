@@ -20,7 +20,7 @@ class UpdateUserTest extends TestCase
     /**
      * @return void
      */
-    public function test_update_user_successfully(): void
+    public function test_update_user_successful(): void
     {
         // Arrange
         $userLoggedIn = UserEloquentModel::factory()->admin()->create();

@@ -5,7 +5,6 @@ namespace Tests\Unit\User;
 use Mockery;
 use PHPUnit\Framework\TestCase;
 use Src\Common\Domain\Exceptions\DatabaseException;
-use Src\User\Application\DTOs\UserDTO;
 use Src\User\Domain\Factories\UserFactory;
 use Src\User\Domain\Repositories\IUserRepository;
 use Src\User\Domain\Services\UserService;
@@ -44,7 +43,7 @@ class DeleteUserUnitTest extends TestCase
         // Arrange
         $id = 1;
 
-        $this->userRepository->shouldReceive('userExists')
+        $this->userRepository->shouldReceive('exists')
             ->once()
             ->with($id)
             ->andReturn(true);
@@ -71,7 +70,7 @@ class DeleteUserUnitTest extends TestCase
         // Arrange
         $id = 1;
 
-        $this->userRepository->shouldReceive('userExists')
+        $this->userRepository->shouldReceive('exists')
             ->once()
             ->with($id)
             ->andReturn(true);

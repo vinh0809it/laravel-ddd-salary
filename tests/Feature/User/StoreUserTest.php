@@ -5,9 +5,7 @@ namespace Tests\Feature\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
 use Mockery;
-use Src\User\Domain\Factories\UserFactory;
 use Src\User\Domain\Model\ValueObjects\Email;
-use Src\User\Domain\Model\ValueObjects\Password;
 use Src\User\Infrastructure\EloquentModels\UserEloquentModel;
 use Tests\TestCase;
 

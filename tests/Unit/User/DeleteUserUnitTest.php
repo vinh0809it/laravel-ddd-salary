@@ -32,10 +32,7 @@ class DeleteUserUnitTest extends TestCase
         parent::setUp();
 
         // Mock dependencies
-        /** @var UserFactory|\Mockery\MockInterface $userFactory */
         $this->userFactory = Mockery::mock(UserFactory::class);
-
-        /** @var IUserRepository|\Mockery\MockInterface $userRepository */
         $this->userRepository = Mockery::mock(IUserRepository::class);
     }
 

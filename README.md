@@ -16,7 +16,7 @@
 ## 📘 Introduction
 I am learning to apply Domain-Driven Design (DDD) to Laravel, and this project is my first step. My goal is to build a standalone API server for salary management, which will be a part of my HRM (Human Resource Management) microservices architecture.
 
-That's why this repository does not include any authentication functionality. There are a few parts of the code where I simulate a logged-in user—please ignore this for now. I plan to implement a JWT middleware later, which will handle the authentication
+That's why this repository does not include any authentication functionality. There are a few parts of the code where I simulate a logged-in user to test the authorization service -- please ignore this for now. I plan to implement a JWT middleware later, which will handle the authentication
 
 Some of my inspirations have been these remarkable articles:
 - https://github.com/Orphail/laravel-ddd

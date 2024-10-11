@@ -4,8 +4,10 @@ namespace Src\User\Domain\Services;
 
 use Illuminate\Support\Collection;
 use Src\Common\Domain\Exceptions\DatabaseException;
+use Src\Common\Domain\Exceptions\EntityNotFoundException;
 use Src\User\Application\DTOs\UserDTO;
 use Src\User\Domain\Factories\UserFactory;
+use Src\User\Domain\Model\ValueObjects\Email;
 use Src\User\Domain\Model\ValueObjects\Name;
 use Src\User\Domain\Repositories\IUserRepository;
 use Throwable;
@@ -33,7 +35,12 @@ class UserService
 
     public function deleteUser(string $id): void
     {
+        if(!$this->userRepository->userExists($id)) {
+            throw new EntityNotFoundException('User is not existed!');
+        }
+
         try {
+
             $this->userRepository->deleteUser($id);
         } catch (Throwable $e) {
             throw new DatabaseException('Failed to store user: ' . $e->getMessage());
@@ -58,11 +65,18 @@ class UserService
         }
     }
 
-    public function updateUser(UserDTO $userDTO)
+    public function updateUser(UserDTO $userDTO): void
     {
         try {
             $existingUser = $this->userRepository->findUserById($userDTO->id);
-            $existingUser->changeName(new Name($userDTO->name));
+
+            if($userDTO->email) {
+                $existingUser->changeEmail(new Email($userDTO->email));
+            }
+
+            if($userDTO->name) {
+                $existingUser->changeName(new Name($userDTO->name));
+            }
             
             $this->userRepository->updateUser($existingUser);
             

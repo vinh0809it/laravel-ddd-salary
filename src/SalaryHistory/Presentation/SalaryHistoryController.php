@@ -3,7 +3,6 @@
 namespace Src\SalaryHistory\Presentation;
 
 use Src\Common\Presentation\BaseController;
-use DomainException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Src\Common\Domain\Services\AuthorizationServiceInterface;

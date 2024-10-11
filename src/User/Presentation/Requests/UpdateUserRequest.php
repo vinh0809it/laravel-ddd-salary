@@ -3,6 +3,7 @@ namespace Src\User\Presentation\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Contracts\Validation\Validator;
+use Src\User\Domain\Rules\EmailUniqueRule;
 
 class UpdateUserRequest extends FormRequest
 {
@@ -17,17 +18,26 @@ class UpdateUserRequest extends FormRequest
         ], 422));
     }
 
-    public function rules(): array
+    public function rules(EmailUniqueRule $emailUniqueRule): array
     {
         return [
-            "name" => ["bail", "required", "max:100"],
+            "email" => [
+                "bail",
+                "nullable",
+                "string",
+                "email",
+                "max:100",
+                $emailUniqueRule,
+            ],
+            "name" => ["bail", "nullable", "max:100"],
         ];
     }
 
     public function messages(): array
     {
         return [
-            'name.*' => __('Tên không hợp lệ'),
+            'email.*' => __('Email is not valid.'),
+            'name.*' => __('Name is not valid.'),
         ];
     }
 }

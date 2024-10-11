@@ -1,11 +1,9 @@
 <?php
 namespace Src\User\Presentation;
 
-use DomainException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Src\Common\Domain\Exceptions\UnauthorizedUserException;
 use Src\User\Application\UseCases\Commands\StoreUserCommand;
 use Src\User\Application\UseCases\Commands\UpdateUserCommand;
 use Src\Common\Domain\Services\AuthorizationServiceInterface;
@@ -35,9 +33,9 @@ class UserController extends BaseController
      */
     public function get(Request $request, GetUsersQuery $getUsersQuery): JsonResponse
     {
-        $this->authorizationService->authorize('user.get');
-
         try {
+            $this->authorizationService->authorize('user.get');
+            
             $users = $getUsersQuery->handle($request->email, $request->name);
             $response = UserDTO::toResponse($users);
 
@@ -86,9 +84,9 @@ class UserController extends BaseController
      */
     public function update(int $id, UpdateUserRequest $request, UpdateUserCommand $updateUserCommand): JsonResponse
     {
-        $this->authorizationService->authorize('user.update');
-
         try {
+            $this->authorizationService->authorize('user.update');
+
             $userDTO = UserDTO::fromRequest($request, $id);
             $updateUserCommand->execute($userDTO);
 
@@ -108,14 +106,14 @@ class UserController extends BaseController
      */
     public function destroy(int $id, DeleteUserCommand $deleteUserCommand): JsonResponse
     {
-        $this->authorizationService->authorize('user.delete');
-
         try {
+            $this->authorizationService->authorize('user.delete');
+
             $deleteUserCommand->execute($id);
             return $this->sendResponse(httpCode: Response::HTTP_NO_CONTENT);
 
         } catch (Throwable $e) {
-            
+
             return $this->handleException($e);
         }
     }

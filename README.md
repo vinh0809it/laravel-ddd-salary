@@ -49,7 +49,7 @@ For more information, you could visit Orphail repository.
 │   ├── Application
 │   ├── Presentation
 │   └── Infrastructure
-├── Company
+├── SalaryHistory
 │   ├── Domain
 │   ├── Application
 │   ├── Presentation

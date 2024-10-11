@@ -4,7 +4,6 @@ namespace Src\Common\Infrastructure;
 
 use Src\Common\Domain\IBaseRepository;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\DB;
 
 abstract class BaseRepository implements IBaseRepository
 {
@@ -40,9 +39,14 @@ abstract class BaseRepository implements IBaseRepository
         return $this->model->getTable();
     }
 
-    public function isExisted(array $cond)
+    public function existsByCond(array $cond)
     {
         return $this->query->where($cond)->exists();
+    }
+
+    public function exists(string $id): bool
+    {
+        return $this->query->where("id", $id)->exists();
     }
 
     public function all()

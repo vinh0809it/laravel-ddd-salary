@@ -2,20 +2,17 @@
 
 namespace Src\User\Domain\Repositories;
 
-//use Src\Agenda\UserEloquentModel\Infrastructure\Repositories\UserDoesNotExistException;
-
 use Illuminate\Support\Collection;
+use Src\Common\Domain\IBaseRepository;
 use Src\User\Domain\Model\User;
 
-interface IUserRepository
+interface IUserRepository extends IBaseRepository
 {
     public function getUsers(?string $email, ?string $name): Collection;
 
-    public function findUserById(string $userId): User;
+    public function findUserById(string $id): User;
 
     public function emailExists(string $email): bool;
-
-    public function userExists(string $id): bool;
 
     public function storeUser(User $user): User;
 

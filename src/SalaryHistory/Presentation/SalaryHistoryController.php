@@ -9,6 +9,8 @@ use Src\Common\Domain\Services\AuthorizationServiceInterface;
 use Src\SalaryHistory\Application\DTOs\SalaryHistoryDTO;
 use Src\SalaryHistory\Presentation\Requests\StoreSalaryHistoryRequest;
 use Src\SalaryHistory\Application\UseCases\Commands\StoreSalaryHistoryCommand;
+use Src\SalaryHistory\Application\UseCases\Commands\UpdateSalaryHistoryCommand;
+use Src\SalaryHistory\Presentation\Requests\UpdateSalaryHistoryRequest;
 use Src\User\Infrastructure\EloquentModels\UserEloquentModel;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
@@ -18,7 +20,8 @@ class SalaryHistoryController extends BaseController
 
     public function __construct(
         private AuthorizationServiceInterface $authorizationService,
-        private StoreSalaryHistoryCommand $storeSalaryHistoryCommand
+        private StoreSalaryHistoryCommand $storeSalaryHistoryCommand,
+        private UpdateSalaryHistoryCommand $updateSalaryHistoryCommand
     ) {
         $user = UserEloquentModel::first();
         Auth::login($user);
@@ -39,6 +42,25 @@ class SalaryHistoryController extends BaseController
                 httpCode: Response::HTTP_CREATED, 
             );
 
+        } catch (Throwable $e) {
+            
+            return $this->handleException($e);
+        }
+    }
+
+    public function update(string $id, UpdateSalaryHistoryRequest $request): JsonResponse
+    {
+        try {
+            $this->authorizationService->authorize('salary_history.update');
+           
+            $salaryHistoryDTO = SalaryHistoryDTO::fromRequest($request, $id);
+            $this->updateSalaryHistoryCommand->execute($salaryHistoryDTO);
+
+            return $this->sendResponse(
+                result: null, 
+                message: '', 
+                httpCode: Response::HTTP_CREATED, 
+            );
         } catch (Throwable $e) {
             
             return $this->handleException($e);

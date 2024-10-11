@@ -30,12 +30,12 @@ class UserService
 
     public function userExists(string $id): bool
     {
-        return $this->userRepository->userExists($id);
+        return $this->userRepository->exists($id);
     }
 
     public function deleteUser(string $id): void
     {
-        if(!$this->userRepository->userExists($id)) {
+        if(!$this->userRepository->exists($id)) {
             throw new EntityNotFoundException('User is not existed!');
         }
 
@@ -68,7 +68,7 @@ class UserService
     public function updateUser(UserDTO $userDTO): void
     {
         try {
-            $existingUser = $this->userRepository->findUserById($userDTO->id);
+            $existingUser = $this->userRepository->find($userDTO->id);
 
             if($userDTO->email) {
                 $existingUser->changeEmail(new Email($userDTO->email));

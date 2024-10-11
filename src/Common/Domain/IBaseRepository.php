@@ -2,15 +2,15 @@
 
 namespace Src\Common\Domain;
 
-use Illuminate\Database\Eloquent\Builder;
-
 interface IBaseRepository
 {
     public function tableName();
 
     public function getQuery();
 
-    public function isExisted(array $cond);
+    public function existsByCond(array $cond);
+
+    public function exists(string $id);
 
     public function all();
 

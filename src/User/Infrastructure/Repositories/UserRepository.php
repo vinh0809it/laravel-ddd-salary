@@ -57,11 +57,6 @@ class UserRepository extends BaseRepository implements IUserRepository
         return $this->model->where('email', $email)->exists();
     }
 
-    public function userExists(string $id): bool
-    {
-        return $this->model->where('id', $id)->exists();
-    }
-
     public function storeUser(User $user): User
     {
         $userEloquent = $this->model->create($user->toArray());

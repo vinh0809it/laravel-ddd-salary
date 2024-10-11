@@ -5,9 +5,11 @@ namespace Src\SalaryHistory\Domain\Services;
 use Carbon\Carbon;
 use DomainException;
 use Src\Common\Domain\Exceptions\DatabaseException;
+use Src\Common\Domain\ValueObjects\Date;
 use Src\SalaryHistory\Application\DTOs\SalaryHistoryDTO;
 use Src\SalaryHistory\Domain\Factories\SalaryHistoryFactory;
 use Src\SalaryHistory\Domain\Model\SalaryHistory;
+use Src\SalaryHistory\Domain\Model\ValueObjects\Salary;
 use Src\SalaryHistory\Domain\Repositories\ISalaryHistoryRepository;
 use Throwable;
 
@@ -49,5 +51,21 @@ class SalaryHistoryService
         } catch (Throwable $e) {
             throw new DatabaseException('Failed to fetch salary histories: ' . $e->getMessage());
         }
+    }
+
+    
+    public function updateSalaryHistory(SalaryHistoryDTO $salaryHistoryDTO): void
+    {
+        $salaryHistory = $this->salaryHistoryRepository->findSalaryHistoryById($salaryHistoryDTO->id);
+
+        if($salaryHistoryDTO->onDate) {
+            $salaryHistory->setDate(new Date($salaryHistoryDTO->onDate));
+        }
+
+        if($salaryHistoryDTO->salary) {
+            $salaryHistory->setSalary(new Salary($salaryHistoryDTO->salary));
+        }
+
+        $this->salaryHistoryRepository->updateSalaryHistory($salaryHistory);
     }
 }

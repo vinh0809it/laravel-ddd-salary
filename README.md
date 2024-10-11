@@ -43,14 +43,16 @@ You can contact me via email at vinh0809it@gmail.com
 I find this structure clearer, so I decided to stick with it.
 For more information, you could visit Orphail repository.
 
+...
 ├── User
 │   ├── Domain
 │   ├── Application
 │   ├── Presentation
 │   └── Infrastructure
-├── SalaryHistory
+├── Company
 │   ├── Domain
 │   ├── Application
 │   ├── Presentation
 │   └── Infrastructure
+...
 

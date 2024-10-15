@@ -9,8 +9,8 @@
 </p>
 
 ## 🚀 Current features
-- User's domain basic CRUD
-- SalaryHistory's domain basic CRUD
+- User Domain basic CRUD
+- SalaryHistory Domain basic CRUD
 - Integration tests and Unit tests
 
 ## 📘 Introduction
@@ -34,14 +34,18 @@ You can contact me via email at vinh0809it@gmail.com
 1. ```composer install```
 2. ```cp .env.example .env```
 3. ```php artisan key:generate```
-5. ```php artisan test```
-6. Set database connection in the ```.env```
-7. ```php artisan migrate```
+4. Set database connection in the ```.env```
+5. ```php artisan migrate```
+6. ```php artisan db:seed```
+7. ```php artisan test```
 
 ## 📁 Structure particularities
 
 I find this structure clearer, so I decided to stick with it.
 For more information, you could visit Orphail repository.
+
+User domain is just a mocked example
+You could focus on the SalaryHistory Domain, that follows more strict with DDD principles than User Domain
 
 ```
 ├── User

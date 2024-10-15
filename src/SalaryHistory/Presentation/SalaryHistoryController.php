@@ -7,7 +7,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Src\Common\Application\DTOs\PageMetaDTO;
 use Src\Common\Domain\Services\AuthorizationServiceInterface;
-use Src\Common\Domain\ValueObjects\Date;
 use Src\SalaryHistory\Application\DTOs\SalaryHistoryDTO;
 use Src\SalaryHistory\Application\DTOs\SalaryHistoryFilterDTO;
 use Src\SalaryHistory\Application\DTOs\UpdateSalaryHistoryDTO;
@@ -29,9 +28,10 @@ class SalaryHistoryController extends BaseController
         private UpdateSalaryHistoryCommand $updateSalaryHistoryCommand,
         private GetSalaryHistoriesQuery $getSalaryHistoriesQuery
     ) {
+
         // Pls ignore this auth, I'm not going to implement authentication for this app
         // Just mock it to let the authorizationService work.
-        $user = UserEloquentModel::first();
+        $user = UserEloquentModel::where('is_admin', true)->first();
         Auth::login($user);
     }
 

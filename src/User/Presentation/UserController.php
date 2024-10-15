@@ -23,7 +23,7 @@ class UserController extends BaseController
         
         // Pls ignore this auth, I'm not going to implement authentication for this app
         // Just mock it to let the authorizationService work.
-        $user = UserEloquentModel::first();
+        $user = UserEloquentModel::where('is_admin', true)->first();
         Auth::login($user);
     }
 

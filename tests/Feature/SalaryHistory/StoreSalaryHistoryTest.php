@@ -19,7 +19,7 @@ class StoreSalaryHistoryTest extends TestCase
     /**
      * @return void
      */
-    public function test_store_salary_history_successfully(): void
+    public function test_store_salary_history_successful(): void
     {
         // Arrange
         $user = UserEloquentModel::factory()->admin()->create();
@@ -28,7 +28,8 @@ class StoreSalaryHistoryTest extends TestCase
         $request = [
             'user_id' => (string)$user->id,
             'on_date' => '2024-10-06',
-            'salary' => '5000000',
+            'salary' => 5000000,
+            'currency' => 'VND',
             'note' => 'Testing'
         ];
 
@@ -61,6 +62,7 @@ class StoreSalaryHistoryTest extends TestCase
             'user_id' => '1',
             'on_date' => '2024-10-06',
             'salary' => 5000000,
+            'currency' => 'aaa',
             'note' => 'Testing'
         ];
 
@@ -81,6 +83,7 @@ class StoreSalaryHistoryTest extends TestCase
             'user_id' => '1',
             'on_date' => 'invalid-date',
             'salary' => 'not-a-number',
+            'currency' => 'not-a-number',
             'note' => 'Testing'
         ];
 

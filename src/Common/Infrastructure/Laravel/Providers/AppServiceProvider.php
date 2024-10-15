@@ -19,6 +19,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        $migrations = [];
+        $domainPath = base_path('src');
+        $files = glob($domainPath . '/*/' . 'Infrastructure/Migrations/*');
+
+        foreach ($files as $file) {
+            $migrations[] = $file;
+        }
+
+        $this->loadMigrationsFrom($migrations);
     }
 }

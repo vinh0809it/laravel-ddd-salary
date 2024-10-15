@@ -1,6 +1,7 @@
 <?php
 namespace Src\Common\Presentation;
 
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Src\Common\Domain\Exceptions\DomainException;
@@ -14,7 +15,7 @@ class BaseController extends Controller
         if ($e instanceof DomainException) {
             return $this->sendError(msg: $e->getMessage(), httpCode: $e->getHttpCode());
         }
-
+        
         $returnMessage = env('APP_DEBUG') ? $e->getMessage() : 'Something went wrong.';
         return $this->sendError(msg: $returnMessage, httpCode: Response::HTTP_INTERNAL_SERVER_ERROR);
     }

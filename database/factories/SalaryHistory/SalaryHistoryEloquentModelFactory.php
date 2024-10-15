@@ -29,6 +29,7 @@ class SalaryHistoryEloquentModelFactory extends Factory
             'user_id' => fake()->numberBetween(1, 100),
             'on_date' => fake()->date(),
             'salary' => fake()->numberBetween(0, 100000),
+            'currency' => fake()->randomElement(['USD', 'VND', 'JPY']),
             'note' => fake()->sentence(),
         ];
     }

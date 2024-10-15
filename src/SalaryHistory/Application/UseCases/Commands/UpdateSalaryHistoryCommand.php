@@ -2,7 +2,7 @@
 
 namespace Src\SalaryHistory\Application\UseCases\Commands;
 
-use Src\SalaryHistory\Application\DTOs\SalaryHistoryDTO;
+use Src\SalaryHistory\Application\DTOs\UpdateSalaryHistoryDTO;
 use Src\SalaryHistory\Domain\Services\SalaryHistoryService;
 
 class UpdateSalaryHistoryCommand
@@ -12,8 +12,8 @@ class UpdateSalaryHistoryCommand
     )
     {}
 
-    public function execute(SalaryHistoryDTO $salaryHistoryDTO): void
+    public function execute(UpdateSalaryHistoryDTO $updateSalaryHistoryDTO): void
     {
-        $this->salaryHistoryService->updateSalaryHistory($salaryHistoryDTO);
+        $this->salaryHistoryService->updateSalaryHistory($updateSalaryHistoryDTO);
     }
 }

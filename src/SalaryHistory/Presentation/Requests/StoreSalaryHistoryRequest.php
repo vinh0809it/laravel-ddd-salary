@@ -8,7 +8,6 @@ use Src\SalaryHistory\Domain\Rules\UserExistsRule;
 
 class StoreSalaryHistoryRequest extends FormRequest
 {
-
     protected function failedValidation(Validator $validator)
     {
         $errors = $validator->errors();
@@ -31,6 +30,7 @@ class StoreSalaryHistoryRequest extends FormRequest
             "user_id" => ["bail", "required", "string", "max:20", $userExistsRule],
             "on_date" => ["bail", "required", "date", "date_format:Y-m-d"],
             "salary" => ["bail", "required", "numeric", "min:0", "max:100000000"],
+            "currency" => ["bail", "required", "string", "min:0", "max:3"],
             "note" => ["bail", "nullable", "string", "max:200"],
         ];
     }
@@ -38,10 +38,12 @@ class StoreSalaryHistoryRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'user_id.*' => __('User is not valid'),
-            'on_date.*' => __('Date is not valid'),
-            'salary.*' => __('Salary is not valid'),
-            'note.*' => __('Note is not valid'),
+            'user_id.user_not_existed' => __('User is not existed.'),
+            'user_id.*' => __('User is not valid.'),
+            'on_date.*' => __('Date is not valid.'),
+            'salary.*' => __('Salary is not valid.'),
+            'currency.*' => __('Currency is not valid.'),
+            'note.*' => __('Note is not valid.'),
         ];
     }
 }

@@ -51,7 +51,7 @@ class SalaryHistoryRepository extends BaseRepository implements ISalaryHistoryRe
         $transformedResults = $result->map(function ($eloquent) {
             return $this->salaryHistoryFactory->fromEloquent($eloquent);
         });
-      
+
         return SalaryHistoryWithPageMetaDTO::fromPaginatedEloquent(
             data: $transformedResults,
             pagination: $this->getPagination($result),
@@ -73,6 +73,6 @@ class SalaryHistoryRepository extends BaseRepository implements ISalaryHistoryRe
 
     public function updateSalaryHistory(SalaryHistory $salaryHistory): void
     {
-        $this->model->find($salaryHistory->id)->update($salaryHistory->toArray());
+        $this->model->find($salaryHistory->getId())->update($salaryHistory->toArray());
     }
 }

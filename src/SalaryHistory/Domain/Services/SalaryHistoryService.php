@@ -6,14 +6,14 @@ use Carbon\Carbon;
 use Throwable;
 use Src\Common\Application\DTOs\PageMetaDTO;
 use Src\Common\Domain\Exceptions\DatabaseException;
-use Src\Common\Domain\ValueObjects\Date;
+use Src\Common\Domain\Exceptions\EntityNotFoundException;
 use Src\SalaryHistory\Domain\Exceptions\UserHasSalaryRecordInYearException;
 use Src\SalaryHistory\Application\DTOs\SalaryHistoryDTO;
 use Src\SalaryHistory\Application\DTOs\SalaryHistoryFilterDTO;
 use Src\SalaryHistory\Application\DTOs\SalaryHistoryWithPageMetaDTO;
+use Src\SalaryHistory\Application\DTOs\UpdateSalaryHistoryDTO;
 use Src\SalaryHistory\Domain\Factories\SalaryHistoryFactory;
 use Src\SalaryHistory\Domain\Model\SalaryHistory;
-use Src\SalaryHistory\Domain\ValueObjects\Salary;
 use Src\SalaryHistory\Domain\Repositories\ISalaryHistoryRepository;
 
 class SalaryHistoryService
@@ -54,12 +54,12 @@ class SalaryHistoryService
      * 
      * @return SalaryHistory
      */
-    public function storeSalaryHistory(SalaryHistoryDTO $salaryHistoryDTO): SalaryHistory
+    public function storeSalaryHistory(SalaryHistoryDTO $dto): SalaryHistory
     {
-        $currentYear = Carbon::parse($salaryHistoryDTO->onDate)->format('Y');
+        $currentYear = Carbon::parse($dto->onDate)->format('Y');
 
         $canStoreSalaryHistory = $this->canStoreSalaryHistory(
-            $salaryHistoryDTO->userId, 
+            $dto->userId, 
             $currentYear
         );
 
@@ -68,11 +68,12 @@ class SalaryHistoryService
         }
  
         $salaryHistory = $this->salaryHistoryFactory->create(
-            $salaryHistoryDTO->id,
-            $salaryHistoryDTO->userId,
-            $salaryHistoryDTO->onDate,
-            $salaryHistoryDTO->salary,
-            $salaryHistoryDTO->note
+            $dto->id,
+            $dto->userId,
+            $dto->onDate,
+            $dto->salary,
+            $dto->currency,
+            $dto->note
         );
 
         try {
@@ -81,22 +82,33 @@ class SalaryHistoryService
             throw new DatabaseException('Failed to store salary history: ' . $e->getMessage());
         }
     }
-
+    
     /**
-     * @param SalaryHistoryDTO $salaryHistoryDTO
+     * @param UpdateSalaryHistoryDTO $dto
      * 
      * @return void
      */
-    public function updateSalaryHistory(SalaryHistoryDTO $salaryHistoryDTO): void
+    public function updateSalaryHistory(UpdateSalaryHistoryDTO $dto): void
     {
-        $salaryHistory = $this->salaryHistoryRepository->findSalaryHistoryById($salaryHistoryDTO->id);
+        $salaryHistory = $this->salaryHistoryRepository->findSalaryHistoryById($dto->id);
 
-        if($salaryHistoryDTO->onDate) {
-            $salaryHistory->setDate(new Date($salaryHistoryDTO->onDate));
+        if(!$salaryHistory) {
+            throw new EntityNotFoundException('The salary history is not existed.');
         }
 
-        if($salaryHistoryDTO->salary) {
-            $salaryHistory->setSalary(new Salary($salaryHistoryDTO->salary));
+        $mappings = [
+            'onDate' => 'setDate',
+            'salary' => 'setSalary',
+            'currency' => 'setCurrency',
+            'note' => 'setNote',
+        ];
+
+        foreach ($mappings as $property => $method) {
+            $value = $dto->$property;
+
+            if($value) {
+                $salaryHistory->$method($value);
+            }
         }
 
         try {

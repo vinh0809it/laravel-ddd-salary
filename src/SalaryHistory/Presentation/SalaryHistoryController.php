@@ -7,8 +7,10 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Src\Common\Application\DTOs\PageMetaDTO;
 use Src\Common\Domain\Services\AuthorizationServiceInterface;
+use Src\Common\Domain\ValueObjects\Date;
 use Src\SalaryHistory\Application\DTOs\SalaryHistoryDTO;
 use Src\SalaryHistory\Application\DTOs\SalaryHistoryFilterDTO;
+use Src\SalaryHistory\Application\DTOs\UpdateSalaryHistoryDTO;
 use Src\SalaryHistory\Presentation\Requests\StoreSalaryHistoryRequest;
 use Src\SalaryHistory\Application\UseCases\Commands\StoreSalaryHistoryCommand;
 use Src\SalaryHistory\Application\UseCases\Commands\UpdateSalaryHistoryCommand;
@@ -42,7 +44,7 @@ class SalaryHistoryController extends BaseController
     {
         try {
             $this->authorizationService->authorize('salary_history.get');
-            
+
             $filter = SalaryHistoryFilterDTO::fromRequest($request);
             $pageMeta = PageMetaDTO::fromRequest($request);
 
@@ -69,6 +71,7 @@ class SalaryHistoryController extends BaseController
            
             $salaryHistoryDTO = SalaryHistoryDTO::fromRequest($request);
             $salaryHistory = $this->storeSalaryHistoryCommand->execute($salaryHistoryDTO);
+            
             $response = SalaryHistoryDTO::toResponse($salaryHistory);
 
             return $this->sendResponse(
@@ -92,9 +95,9 @@ class SalaryHistoryController extends BaseController
     {
         try {
             $this->authorizationService->authorize('salary_history.update');
+            $updateSalaryHistoryDTO = UpdateSalaryHistoryDTO::fromRequest($request, $id);
            
-            $salaryHistoryDTO = SalaryHistoryDTO::fromRequest($request, $id);
-            $this->updateSalaryHistoryCommand->execute($salaryHistoryDTO);
+            $this->updateSalaryHistoryCommand->execute($updateSalaryHistoryDTO);
 
             return $this->sendResponse(
                 result: null, 
@@ -102,7 +105,7 @@ class SalaryHistoryController extends BaseController
                 httpCode: Response::HTTP_CREATED, 
             );
         } catch (Throwable $e) {
-
+            
             return $this->handleException($e);
         }
     }

@@ -6,12 +6,13 @@ use Mockery;
 use PHPUnit\Framework\TestCase;
 use Src\Common\Domain\Exceptions\DatabaseException;
 use Src\Common\Domain\ValueObjects\Date;
-use Src\SalaryHistory\Application\DTOs\SalaryHistoryDTO;
+use Src\SalaryHistory\Application\DTOs\UpdateSalaryHistoryDTO;
 use Src\SalaryHistory\Domain\Factories\SalaryHistoryFactory;
 use Src\SalaryHistory\Domain\Model\SalaryHistory;
 use Src\SalaryHistory\Domain\ValueObjects\Salary;
 use Src\SalaryHistory\Domain\Repositories\ISalaryHistoryRepository;
 use Src\SalaryHistory\Domain\Services\SalaryHistoryService;
+use Src\SalaryHistory\Domain\ValueObjects\Currency;
 
 class UpdateSalaryHistoryUnitTest extends TestCase
 {
@@ -28,7 +29,6 @@ class UpdateSalaryHistoryUnitTest extends TestCase
     {
         parent::setUp();
 
-        // Mock dependencies
         $this->salaryHistoryFactory = Mockery::mock(SalaryHistoryFactory::class);
         $this->salaryHistoryRepository = Mockery::mock(ISalaryHistoryRepository::class);
     }
@@ -38,17 +38,17 @@ class UpdateSalaryHistoryUnitTest extends TestCase
         // Arrange
         $salaryHistory = Mockery::mock(SalaryHistory::class);
 
-        $salaryHistoryDTO = new SalaryHistoryDTO(
+        $updateDTO = UpdateSalaryHistoryDTO::create(
             id: 1, 
-            userId: 1,
-            onDate: '2024-10-11',
-            salary: 10000000,
-            note: "Noted"
+            onDate: Date::fromString('2024-10-11'),
+            salary: Salary::fromValue(10000000),
+            currency: Currency::fromString('VND'),
+            note: null
         );
 
         $this->salaryHistoryRepository->shouldReceive('findSalaryHistoryById')
             ->once()
-            ->with($salaryHistoryDTO->id)
+            ->with($updateDTO->id)
             ->andReturn($salaryHistory);
 
         $salaryHistory->shouldReceive('setDate')
@@ -59,6 +59,10 @@ class UpdateSalaryHistoryUnitTest extends TestCase
             ->once()
             ->with(Mockery::type(Salary::class));
 
+        $salaryHistory->shouldReceive('setCurrency')
+            ->once()
+            ->with(Mockery::type(Currency::class));
+
         $this->salaryHistoryRepository->shouldReceive('updateSalaryHistory')
             ->once()
             ->with($salaryHistory);
@@ -66,26 +70,26 @@ class UpdateSalaryHistoryUnitTest extends TestCase
         $salaryHistoryService = new SalaryHistoryService($this->salaryHistoryFactory, $this->salaryHistoryRepository);
 
         // Act
-        $salaryHistoryService->updateSalaryHistory($salaryHistoryDTO);
+        $salaryHistoryService->updateSalaryHistory($updateDTO);
 
         // Assertions
-        $this->assertTrue(true); // No exception means success
+        $this->assertTrue(true);
     }
 
     public function test_updateUser_failed(): void
     {
         // Arrange
-        $salaryHistoryDTO = new SalaryHistoryDTO(
+        $updateDTO = UpdateSalaryHistoryDTO::create(
             id: 1, 
-            userId: 1,
-            onDate: '2024-10-11',
-            salary: 10000000,
+            onDate: Date::fromString('2024-10-11'),
+            salary: Salary::fromValue(10000000),
+            currency: Currency::fromString('VND'),
             note: "Noted"
         );
 
         $this->salaryHistoryRepository->shouldReceive('findSalaryHistoryById')
             ->once()
-            ->with($salaryHistoryDTO->id)
+            ->with($updateDTO->id)
             ->andThrow(new DatabaseException('Database error'));
 
         $salaryHistoryService = new SalaryHistoryService($this->salaryHistoryFactory, $this->salaryHistoryRepository);
@@ -95,6 +99,6 @@ class UpdateSalaryHistoryUnitTest extends TestCase
         $this->expectExceptionMessage('Database error');
 
         // Act
-        $salaryHistoryService->updateSalaryHistory($salaryHistoryDTO);
+        $salaryHistoryService->updateSalaryHistory($updateDTO);
     }
 }

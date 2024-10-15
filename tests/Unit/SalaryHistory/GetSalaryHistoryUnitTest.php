@@ -13,6 +13,7 @@ use Src\SalaryHistory\Domain\Factories\SalaryHistoryFactory;
 use Src\SalaryHistory\Domain\Model\SalaryHistory;
 use Src\SalaryHistory\Domain\Repositories\ISalaryHistoryRepository;
 use Src\SalaryHistory\Domain\Services\SalaryHistoryService;
+use Src\SalaryHistory\Domain\ValueObjects\Currency;
 use Src\SalaryHistory\Domain\ValueObjects\Salary;
 use Src\SalaryHistory\Presentation\Requests\GetSalaryHistoryRequest;
 
@@ -40,15 +41,15 @@ class GetSalaryHistoryUnitTest extends TestCase
             'no parameters' => [
                 new GetSalaryHistoryRequest(),
                 new Collection([
-                    new SalaryHistory(1, 1, new Date('2024-10-01'), new Salary(5000000), ''),
-                    new SalaryHistory(2, 2, new Date('2024-10-02'), new Salary(6000000), ''),
+                    new SalaryHistory(1, 1, Date::fromString('2024-10-01'), Salary::fromValue(5000000), Currency::fromString('VND'), ''),
+                    new SalaryHistory(2, 2, Date::fromString('2024-10-02'), Salary::fromValue(6000000), Currency::fromString('VND'), ''),
                 ]),
             ],
             'with from_date and to_date' => [
                 new GetSalaryHistoryRequest(['from_date' => '2024-10-01', 'to_date' => '2024-11-01']),
                 new Collection([
-                    new SalaryHistory(1, 1, new Date('2024-10-01'), new Salary(5000000), ''),
-                    new SalaryHistory(2, 2, new Date('2024-10-02'), new Salary(6000000), ''),
+                    new SalaryHistory(1, 1, Date::fromString('2024-10-01'), Salary::fromValue(5000000), Currency::fromString('VND'), ''),
+                    new SalaryHistory(2, 2, Date::fromString('2024-10-02'), Salary::fromValue(6000000), Currency::fromString('VND'), ''),
                 ]),
             ],
         ];
@@ -61,6 +62,7 @@ class GetSalaryHistoryUnitTest extends TestCase
     {
         // Arrange
         $filterDTO = SalaryHistoryFilterDTO::fromRequest($request);
+        
         $pageMetaDTO = PageMetaDTO::fromRequest($request);
 
         $resultWithPageMetaDTO = SalaryHistoryWithPageMetaDTO::fromPaginatedEloquent(

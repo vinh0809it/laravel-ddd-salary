@@ -20,6 +20,7 @@ class SalaryHistoryEloquentModel extends Model
         'user_id',
         'on_date',
         'salary',
+        'currency',
         'note'
     ];
 

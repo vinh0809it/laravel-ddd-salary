@@ -8,7 +8,6 @@ use Src\User\Domain\Services\UserService;
 
 class UserExistsRule implements ValidationRule
 {
-
     public function __construct(private UserService $userService)
     {}
 
@@ -18,7 +17,7 @@ class UserExistsRule implements ValidationRule
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
         if (!$this->userService->userExists($value)) {
-            $fail('The user is not existed!');
+            $fail('user_id.user_not_existed');
         }
     }
 }

@@ -3,16 +3,17 @@
 namespace Tests\Unit\SalaryHistory;
 
 use Carbon\Carbon;
-use DomainException;
 use Mockery;
 use PHPUnit\Framework\TestCase;
 use Src\Common\Domain\ValueObjects\Date;
 use Src\SalaryHistory\Application\DTOs\SalaryHistoryDTO;
+use Src\SalaryHistory\Domain\Exceptions\UserHasSalaryRecordInYearException;
 use Src\SalaryHistory\Domain\Factories\SalaryHistoryFactory;
 use Src\SalaryHistory\Domain\Model\SalaryHistory;
 use Src\SalaryHistory\Domain\ValueObjects\Salary;
 use Src\SalaryHistory\Domain\Repositories\ISalaryHistoryRepository;
 use Src\SalaryHistory\Domain\Services\SalaryHistoryService;
+use Src\SalaryHistory\Domain\ValueObjects\Currency;
 
 class StoreSalaryHistoryUnitTest extends TestCase
 {
@@ -36,7 +37,6 @@ class StoreSalaryHistoryUnitTest extends TestCase
     {
         parent::setUp();
 
-        // Mock dependencies
         $this->salaryHistoryFactory = Mockery::mock(SalaryHistoryFactory::class);
         $this->salaryHistoryRepository = Mockery::mock(ISalaryHistoryRepository::class);
     }
@@ -98,6 +98,7 @@ class StoreSalaryHistoryUnitTest extends TestCase
             userId: 1,
             onDate: '2024-10-06',
             salary: 5000000,
+            currency: 'VND',
             note: 'Testing'
         );
 
@@ -111,7 +112,7 @@ class StoreSalaryHistoryUnitTest extends TestCase
         $salaryHistoryService = new SalaryHistoryService($this->salaryHistoryFactory, $this->salaryHistoryRepository);
 
         // Assertions
-        $this->expectException(DomainException::class);
+        $this->expectException(UserHasSalaryRecordInYearException::class);
         $this->expectExceptionMessage('User already has a record for this year.');
 
         // Act
@@ -127,8 +128,9 @@ class StoreSalaryHistoryUnitTest extends TestCase
         $salaryHistory = new SalaryHistory(
             id: 1, 
             userId: 1,
-            onDate: new Date('2024-10-06'),
-            salary: new Salary(5000000),
+            onDate: Date::fromString('2024-10-06'),
+            salary: Salary::fromValue(5000000),
+            currency: Currency::fromString('VND'),
             note: 'Testing'
         );
 
@@ -137,6 +139,7 @@ class StoreSalaryHistoryUnitTest extends TestCase
             userId: 1,
             onDate: '2024-10-06',
             salary: 5000000,
+            currency: 'VND',
             note: 'Testing'
         );
 
@@ -149,13 +152,6 @@ class StoreSalaryHistoryUnitTest extends TestCase
 
         $this->salaryHistoryFactory->shouldReceive('create')
             ->once()
-            ->with(
-                null,
-                1,
-                '2024-10-06',
-                5000000,
-                'Testing'
-            )
             ->andReturn($salaryHistory);
 
         $this->salaryHistoryRepository->shouldReceive('storeSalaryHistory')
@@ -170,10 +166,10 @@ class StoreSalaryHistoryUnitTest extends TestCase
 
         // Assertions
         $this->assertInstanceOf(SalaryHistory::class, $result);
-        $this->assertEquals(1, $result->id);
-        $this->assertEquals(1, $result->userId);
-        $this->assertEquals('2024-10-06', $result->onDate->format());
-        $this->assertEquals(5000000, $result->salary->getAmount());
-        $this->assertEquals('Testing', $result->note);
+        $this->assertEquals(1, $result->getId());
+        $this->assertEquals(1, $result->getUserId());
+        $this->assertEquals('2024-10-06', $result->getOnDate()->format());
+        $this->assertEquals(5000000, $result->getSalary()->getAmount());
+        $this->assertEquals('Testing', $result->getNote());
     }
 }

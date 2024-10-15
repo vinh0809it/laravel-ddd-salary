@@ -32,11 +32,12 @@ class SalaryHistoryWithPageMetaDTO
     {
         $responseData = $this->salaryHistories->map(function (SalaryHistory $entity) {
             return [
-                'id' => $entity->id,
-                'user_id' => $entity->userId,
-                'on_date' => $entity->onDate->format(),
-                'salary' => $entity->salary->toString(),
-                'note' => $entity->note,
+                'id' => $entity->getId(),
+                'user_id' => $entity->getUserId(),
+                'on_date' => $entity->getOnDate()->format(),
+                'salary' => $entity->getSalary()->toString(),
+                'currency' => $entity->getCurrency()->toString(),
+                'note' => $entity->getNote(),
             ];
         })->toArray();
 

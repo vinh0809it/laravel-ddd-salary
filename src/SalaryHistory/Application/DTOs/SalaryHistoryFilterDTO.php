@@ -2,6 +2,7 @@
 namespace Src\SalaryHistory\Application\DTOs;
 
 use Illuminate\Http\Request;
+use Src\Common\Domain\ValueObjects\Date;
 use Src\Common\Domain\ValueObjects\DateRange;
 
 class SalaryHistoryFilterDTO
@@ -14,9 +15,9 @@ class SalaryHistoryFilterDTO
 
     public static function fromRequest(Request $request): self
     {
-        $userId = $request->input('user_id');
-        $dateRange = DateRange::from($request->input('from_date'), $request->input('to_date'));
-
+        $userId = $request->user_id;
+        $dateRange = DateRange::fromString($request->from_date, $request->to_date);
+        
         return new self(
             $userId,
             $dateRange

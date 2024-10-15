@@ -3,20 +3,25 @@
 namespace Src\Common\Domain\ValueObjects;
 
 use Carbon\CarbonImmutable;
-use InvalidArgumentException;
+use Src\Common\Domain\Exceptions\InvalidDateException;
 use Throwable;
 
-class Date
+final class Date
 {
     private CarbonImmutable $date;
 
-    public function __construct(?string $date)
+    public function __construct(string $date)
     {
         try {
-            $this->date = $date ? new CarbonImmutable($date) : null;
+            $this->date = new CarbonImmutable($date);
         } catch (Throwable $e) {
-            throw new InvalidArgumentException('Invalid date format.');
+            throw new InvalidDateException('Invalid date format.');
         }
+    }
+
+    public static function fromString(string $date): self
+    {
+        return new static($date);
     }
 
     public function getDate(): CarbonImmutable

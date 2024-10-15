@@ -1,7 +1,7 @@
 <?php
 namespace Src\SalaryHistory\Domain\ValueObjects;
 
-use Src\Common\Domain\Exceptions\InvalidSalaryException;
+use Src\SalaryHistory\Domain\Exceptions\InvalidSalaryException;
 use Src\Common\Domain\Exceptions\ValueRequiredException;
 
 final class Salary
@@ -10,12 +10,6 @@ final class Salary
 
     public function __construct(float $amount)
     {
-        $this->validate($amount);
-        $this->amount = $amount;
-    }
-
-    private function validate(float $amount): void
-    {
         if($amount === null) {
             throw new ValueRequiredException('Salary cannot be null.');
         }
@@ -23,6 +17,17 @@ final class Salary
         if ($amount < 0) {
             throw new InvalidSalaryException('Salary cannot be negative.');
         }
+
+        $this->amount = $amount;
+    }
+
+    public static function fromValue(mixed $value) {
+
+        if (is_numeric($value)) {
+            return new self($value);
+        }
+
+        throw new InvalidSalaryException('Salary must be a float or a numeric string.');
     }
 
     public function getAmount(): float

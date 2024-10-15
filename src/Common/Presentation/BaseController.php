@@ -1,12 +1,9 @@
 <?php
-
 namespace Src\Common\Presentation;
 
-use DomainException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
-use Src\Common\Domain\Exceptions\EntityNotFoundException;
-use Src\Common\Domain\Exceptions\UnauthorizedUserException;
+use Src\Common\Domain\Exceptions\DomainException;
 use Src\Common\Infrastructure\Laravel\Controller;
 use Throwable;
 
@@ -14,19 +11,12 @@ class BaseController extends Controller
 {
     protected function handleException(Throwable $e): JsonResponse
     {
-        if ($e instanceof EntityNotFoundException) {
-            return $this->sendError(msg: $e->getMessage(), httpCode: Response::HTTP_NOT_FOUND);
-        }
-
-        if ($e instanceof UnauthorizedUserException) {
-            return $this->sendError(msg: $e->getMessage(), httpCode: Response::HTTP_UNAUTHORIZED);
-        }
-
         if ($e instanceof DomainException) {
-            return $this->sendError(msg: $e->getMessage(), httpCode: Response::HTTP_UNPROCESSABLE_ENTITY);
+            return $this->sendError(msg: $e->getMessage(), httpCode: $e->getHttpCode());
         }
-        
-        return $this->sendError(msg: 'Something went wrong.', httpCode: Response::HTTP_INTERNAL_SERVER_ERROR);
+
+        $returnMessage = env('APP_DEBUG') ? $e->getMessage() : 'Something went wrong.';
+        return $this->sendError(msg: $returnMessage, httpCode: Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 
     /**
@@ -47,13 +37,26 @@ class BaseController extends Controller
     }
 
     /**
+     * @param array|null $result
+     * @param string $message
+     * @param int $httpCode
+     * 
+     * @return JsonResponse
+     */
+    public function sendResponseWithPageMeta(?array $result = [], string $message = "", int $httpCode = Response::HTTP_OK): JsonResponse
+    {
+        $result['message'] = $message;
+        return response()->json($result, $httpCode);
+    }
+
+    /**
      * @param string $msg
      * @param array|null $errors
      * @param int $httpCode
      * 
      * @return JsonResponse
      */
-    public function sendError(string $msg, ?array $errors = [], int $httpCode = 500): JsonResponse
+    public function sendError(string $msg, ?array $errors = [], int $httpCode = Response::HTTP_INTERNAL_SERVER_ERROR): JsonResponse
     {
         $response['message'] = $msg;
         $response['data'] = $errors;

@@ -3,9 +3,9 @@ namespace Src\User\Domain\Factories;
 
 use Src\Common\Domain\Exceptions\FactoryException;
 use Src\User\Domain\Model\User;
-use Src\User\Domain\Model\ValueObjects\Email;
-use Src\User\Domain\Model\ValueObjects\Name;
-use Src\User\Domain\Model\ValueObjects\Password;
+use Src\User\Domain\ValueObjects\Email;
+use Src\User\Domain\ValueObjects\Name;
+use Src\User\Domain\ValueObjects\Password;
 use Src\User\Infrastructure\EloquentModels\UserEloquentModel;
 use Throwable;
 

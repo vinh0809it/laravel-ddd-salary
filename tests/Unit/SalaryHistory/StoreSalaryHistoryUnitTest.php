@@ -10,8 +10,7 @@ use Src\Common\Domain\ValueObjects\Date;
 use Src\SalaryHistory\Application\DTOs\SalaryHistoryDTO;
 use Src\SalaryHistory\Domain\Factories\SalaryHistoryFactory;
 use Src\SalaryHistory\Domain\Model\SalaryHistory;
-use Src\SalaryHistory\Domain\Model\ValueObjects\Salary;
-use Src\SalaryHistory\Domain\Model\ValueObjects\UserId;
+use Src\SalaryHistory\Domain\ValueObjects\Salary;
 use Src\SalaryHistory\Domain\Repositories\ISalaryHistoryRepository;
 use Src\SalaryHistory\Domain\Services\SalaryHistoryService;
 
@@ -38,10 +37,7 @@ class StoreSalaryHistoryUnitTest extends TestCase
         parent::setUp();
 
         // Mock dependencies
-        /** @var SalaryHistoryFactory|\Mockery\MockInterface $salaryHistoryFactory */
         $this->salaryHistoryFactory = Mockery::mock(SalaryHistoryFactory::class);
-
-        /** @var ISalaryHistoryRepository|\Mockery\MockInterface $salaryHistoryRepository */
         $this->salaryHistoryRepository = Mockery::mock(ISalaryHistoryRepository::class);
     }
 
@@ -130,7 +126,7 @@ class StoreSalaryHistoryUnitTest extends TestCase
         // Arrange
         $salaryHistory = new SalaryHistory(
             id: 1, 
-            userId: new UserId(1),
+            userId: 1,
             onDate: new Date('2024-10-06'),
             salary: new Salary(5000000),
             note: 'Testing'
@@ -175,8 +171,8 @@ class StoreSalaryHistoryUnitTest extends TestCase
         // Assertions
         $this->assertInstanceOf(SalaryHistory::class, $result);
         $this->assertEquals(1, $result->id);
-        $this->assertEquals(1, $result->userId->toString());
-        $this->assertEquals('2024-10-06', $result->onDate->toString());
+        $this->assertEquals(1, $result->userId);
+        $this->assertEquals('2024-10-06', $result->onDate->format());
         $this->assertEquals(5000000, $result->salary->getAmount());
         $this->assertEquals('Testing', $result->note);
     }

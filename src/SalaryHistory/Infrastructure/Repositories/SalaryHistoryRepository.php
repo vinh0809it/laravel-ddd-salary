@@ -2,7 +2,10 @@
 
 namespace Src\SalaryHistory\Infrastructure\Repositories;
 
+use Src\Common\Application\DTOs\PageMetaDTO;
 use Src\Common\Infrastructure\BaseRepository;
+use Src\SalaryHistory\Application\DTOs\SalaryHistoryFilterDTO;
+use Src\SalaryHistory\Application\DTOs\SalaryHistoryWithPageMetaDTO;
 use Src\SalaryHistory\Domain\Factories\SalaryHistoryFactory;
 use Src\SalaryHistory\Domain\Repositories\ISalaryHistoryRepository;
 use Src\SalaryHistory\Domain\Model\SalaryHistory;
@@ -29,6 +32,33 @@ class SalaryHistoryRepository extends BaseRepository implements ISalaryHistoryRe
             ->exists();
     }
 
+    public function getSalaryHistories(SalaryHistoryFilterDTO $filter, PageMetaDTO $pageMetaDTO): SalaryHistoryWithPageMetaDTO
+    {
+        $query = $this->model->query();
+
+        if($filter->userId) {
+            $query->where('user_id', $filter->userId);
+        }
+       
+        if($filter->dateRange) {
+            $query->whereBetween('on_date', $filter->dateRange->toArray());
+        }
+
+        $query->orderBy($pageMetaDTO->sort, $pageMetaDTO->sortDirection);
+
+        $result = $query->paginate($pageMetaDTO->pageSize, ['*'], 'page', $pageMetaDTO->page);
+
+        $transformedResults = $result->map(function ($eloquent) {
+            return $this->salaryHistoryFactory->fromEloquent($eloquent);
+        });
+      
+        return SalaryHistoryWithPageMetaDTO::fromPaginatedEloquent(
+            data: $transformedResults,
+            pagination: $this->getPagination($result),
+            sorting: ['field' => $pageMetaDTO->sort, 'direction' => $pageMetaDTO->sortDirection]
+        );
+    }
+    
     public function findSalaryHistoryById(string $id): SalaryHistory
     {
         $salaryHistory = $this->model->find($id);

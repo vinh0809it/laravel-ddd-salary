@@ -1,13 +1,13 @@
 <?php
-
 namespace Src\Common\Domain\Exceptions;
 
-use DomainException;
+use Illuminate\Http\Response;
 
 final class DatabaseException extends DomainException
 {
-    public function __construct(string $message = 'Something is wrong with the database.')
+    public function __construct(string $message = 'Something went wrong with the database.')
     {
+        $this->httpCode = Response::HTTP_SERVICE_UNAVAILABLE;
         parent::__construct($message);
     }
 }

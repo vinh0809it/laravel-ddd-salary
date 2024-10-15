@@ -59,23 +59,17 @@ class SalaryHistoryDTO
      */
     public static function toResponse(mixed $entities): array
     {
-        if(!($entities instanceof Collection)) {
-            $entities = [$entities];
-        }
+        $collection = $entities instanceof Collection ? $entities : collect([$entities]);
 
-        $result = [];
-
-        foreach($entities as $entity) {
-            $result[] = [
+        return $collection->map(function ($entity) {
+            return [
                 'id' => $entity->id,
-                'user_id' => $entity->userId->toString(),
-                'on_date' => $entity->onDate->toString(),
+                'user_id' => $entity->userId,
+                'on_date' => $entity->onDate->format(),
                 'salary' => $entity->salary->toString(),
-                'note' => $entity->note
+                'note' => $entity->note,
             ];
-        };
-
-        return $result;
+        })->toArray();
     }
 
     /**

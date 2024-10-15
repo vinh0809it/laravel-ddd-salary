@@ -7,8 +7,8 @@ use Src\Common\Domain\Exceptions\DatabaseException;
 use Src\Common\Domain\Exceptions\EntityNotFoundException;
 use Src\User\Application\DTOs\UserDTO;
 use Src\User\Domain\Factories\UserFactory;
-use Src\User\Domain\Model\ValueObjects\Email;
-use Src\User\Domain\Model\ValueObjects\Name;
+use Src\User\Domain\ValueObjects\Email;
+use Src\User\Domain\ValueObjects\Name;
 use Src\User\Domain\Repositories\IUserRepository;
 use Throwable;
 

@@ -2,12 +2,14 @@
 
 namespace Src\User\Application\Exceptions;
 
-use DomainException;
+use Illuminate\Http\Response;
+use Src\Common\Domain\Exceptions\DomainException;
 
 final class EmailAlreadyUsedException extends DomainException
 {
     public function __construct()
     {
+        $this->httpCode = Response::HTTP_UNPROCESSABLE_ENTITY;
         parent::__construct('Email is already taken!');
     }
 }

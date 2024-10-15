@@ -3,8 +3,7 @@ namespace Src\SalaryHistory\Domain\Factories;
 
 use Src\Common\Domain\Exceptions\FactoryException;
 use Src\Common\Domain\ValueObjects\Date;
-use Src\SalaryHistory\Domain\Model\ValueObjects\Salary;
-use Src\SalaryHistory\Domain\Model\ValueObjects\UserId;
+use Src\SalaryHistory\Domain\ValueObjects\Salary;
 use Src\SalaryHistory\Infrastructure\EloquentModels\SalaryHistoryEloquentModel;
 use Src\SalaryHistory\Domain\Model\SalaryHistory;
 use Throwable;
@@ -25,7 +24,7 @@ class SalaryHistoryFactory
         try {
             return new SalaryHistory(
                 id: $id,
-                userId: new UserId($userId),
+                userId: $userId,
                 onDate: new Date($onDate),
                 salary: new Salary($salary),
                 note: $note
@@ -46,7 +45,7 @@ class SalaryHistoryFactory
         try {
             return new SalaryHistory(
                 id: $salaryHistoryEloquent->id,
-                userId: new UserId($salaryHistoryEloquent->user_id),
+                userId: $salaryHistoryEloquent->user_id,
                 onDate: new Date($salaryHistoryEloquent->on_date),
                 salary: new Salary($salaryHistoryEloquent->salary),
                 note: $salaryHistoryEloquent->note

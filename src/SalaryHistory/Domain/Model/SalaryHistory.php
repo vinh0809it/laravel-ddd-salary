@@ -3,14 +3,13 @@ namespace Src\SalaryHistory\Domain\Model;
 
 use Src\Common\Domain\ValueObjects\Date;
 use Src\Common\Domain\AggregateRoot;
-use Src\SalaryHistory\Domain\Model\ValueObjects\Salary;
-use Src\SalaryHistory\Domain\Model\ValueObjects\UserId;
+use Src\SalaryHistory\Domain\ValueObjects\Salary;
 
 class SalaryHistory extends AggregateRoot
 {
     public function __construct(
         public ?string $id,
-        public UserId $userId,
+        public string $userId,
         public Date $onDate,
         public Salary $salary,
         public ?string $note
@@ -39,11 +38,6 @@ class SalaryHistory extends AggregateRoot
         return $this->id;
     }
 
-    public function getUserId(): UserId
-    {
-        return $this->userId;
-    }
-
     public function getOnDate(): Date
     {
         return $this->onDate;
@@ -58,8 +52,8 @@ class SalaryHistory extends AggregateRoot
     {
         return [
             'id' => $this->getId(),
-            'user_id' => $this->getUserId()->toString(),
-            'on_date' => $this->getOnDate()->toString(),
+            'user_id' => $this->userId,
+            'on_date' => $this->getOnDate()->format(),
             'salary' => $this->getSalary()->getAmount(),
             'note' => $this->note
         ];

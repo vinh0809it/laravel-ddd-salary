@@ -2,6 +2,8 @@
 
 namespace Src\Common\Domain;
 
+use Illuminate\Pagination\LengthAwarePaginator;
+
 interface IBaseRepository
 {
     public function tableName();
@@ -23,4 +25,6 @@ interface IBaseRepository
     public function updateBy(array $cond, array $param);
 
     public function delete($id);
+
+    public function getPagination(LengthAwarePaginator $result): array;
 }

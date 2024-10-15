@@ -9,7 +9,7 @@ use Src\Common\Domain\ValueObjects\Date;
 use Src\SalaryHistory\Application\DTOs\SalaryHistoryDTO;
 use Src\SalaryHistory\Domain\Factories\SalaryHistoryFactory;
 use Src\SalaryHistory\Domain\Model\SalaryHistory;
-use Src\SalaryHistory\Domain\Model\ValueObjects\Salary;
+use Src\SalaryHistory\Domain\ValueObjects\Salary;
 use Src\SalaryHistory\Domain\Repositories\ISalaryHistoryRepository;
 use Src\SalaryHistory\Domain\Services\SalaryHistoryService;
 

@@ -19,8 +19,10 @@ use Throwable;
 
 class UserController extends BaseController
 {
-
     public function __construct( private AuthorizationServiceInterface $authorizationService) {
+        
+        // Pls ignore this auth, I'm not going to implement authentication for this app
+        // Just mock it to let the authorizationService work.
         $user = UserEloquentModel::first();
         Auth::login($user);
     }
@@ -93,7 +95,7 @@ class UserController extends BaseController
             return $this->sendResponse();
 
         } catch (Throwable $e) {
-
+            
             return $this->handleException($e);
         }
     }

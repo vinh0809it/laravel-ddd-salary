@@ -4,8 +4,7 @@ namespace Tests\Feature\User;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
-use Mockery;
-use Src\User\Domain\Model\ValueObjects\Email;
+use Src\User\Domain\ValueObjects\Email;
 use Src\User\Infrastructure\EloquentModels\UserEloquentModel;
 use Tests\TestCase;
 
@@ -97,11 +96,5 @@ class StoreUserTest extends TestCase
         // Assertions
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY); 
         $response->assertJsonValidationErrors(['email']); 
-    }
-
-    protected function tearDown(): void
-    {
-        Mockery::close();
-        parent::tearDown();
     }
 }

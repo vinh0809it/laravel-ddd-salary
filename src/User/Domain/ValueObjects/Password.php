@@ -1,8 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Src\User\Domain\Model\ValueObjects;
+namespace Src\User\Domain\ValueObjects;
 
 use Src\User\Domain\Exceptions\PasswordTooShortException;
 
@@ -37,10 +35,5 @@ final class Password
     public function verify(string $plainPassword): bool
     {
         return password_verify($plainPassword, $this->password);
-    }
-
-    public function jsonSerialize(): string
-    {
-        return '';
     }
 }

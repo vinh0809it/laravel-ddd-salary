@@ -4,7 +4,6 @@ namespace Tests\Feature\SalaryHistory;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
-use Mockery;
 use Src\SalaryHistory\Infrastructure\EloquentModels\SalaryHistoryEloquentModel;
 use Src\User\Infrastructure\EloquentModels\UserEloquentModel;
 use Tests\TestCase;
@@ -16,12 +15,6 @@ class UpdateSalaryHistoryTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-    }
-    
-    protected function tearDown(): void
-    {
-        Mockery::close();
-        parent::tearDown();
     }
     
     public function test_updateSalaryHistory_successful(): void

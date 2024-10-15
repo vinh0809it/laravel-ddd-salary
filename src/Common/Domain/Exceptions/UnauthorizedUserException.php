@@ -2,10 +2,13 @@
 
 namespace Src\Common\Domain\Exceptions;
 
-final class UnauthorizedUserException extends \Exception
+use Illuminate\Http\Response;
+
+final class UnauthorizedUserException extends DomainException
 {
-    public function __construct(string $custom_message = '')
+    public function __construct(string $message = 'The user is not authorized to access this resource or perform this action')
     {
-        parent::__construct($custom_message ?: 'The user is not authorized to access this resource or perform this action');
+        $this->httpCode = Response::HTTP_UNAUTHORIZED;
+        parent::__construct($message);
     }
 }

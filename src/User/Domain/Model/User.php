@@ -1,10 +1,10 @@
 <?php
 namespace Src\User\Domain\Model;
 
-use Src\User\Domain\Model\ValueObjects\Email;
-use Src\User\Domain\Model\ValueObjects\Name;
+use Src\User\Domain\ValueObjects\Email;
+use Src\User\Domain\ValueObjects\Name;
 use Src\Common\Domain\AggregateRoot;
-use Src\User\Domain\Model\ValueObjects\Password;
+use Src\User\Domain\ValueObjects\Password;
 
 class User extends AggregateRoot
 {

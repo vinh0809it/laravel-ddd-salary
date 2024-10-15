@@ -4,6 +4,7 @@ namespace Src\Common\Infrastructure;
 
 use Src\Common\Domain\IBaseRepository;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 abstract class BaseRepository implements IBaseRepository
 {
@@ -82,5 +83,17 @@ abstract class BaseRepository implements IBaseRepository
     public function create($param = [])
     {
         return $this->model->create($param);
+    }
+
+    public function getPagination(LengthAwarePaginator $result): array
+    {
+        return  [
+            'current_page' => $result->currentPage(),
+            'last_page' => $result->lastPage(),
+            'per_page' => $result->perPage(),
+            'total' => $result->total(),
+            'from' => $result->firstItem(),
+            'to' => $result->lastItem()
+        ];
     }
 }

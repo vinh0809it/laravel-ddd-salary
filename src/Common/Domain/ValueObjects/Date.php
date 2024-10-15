@@ -2,36 +2,55 @@
 
 namespace Src\Common\Domain\ValueObjects;
 
-use DateTimeImmutable;
+use Carbon\CarbonImmutable;
 use InvalidArgumentException;
+use Throwable;
 
 class Date
 {
-    private DateTimeImmutable $date;
+    private CarbonImmutable $date;
 
-    public function __construct(string $dateString)
+    public function __construct(?string $date)
     {
-        $this->date = $this->createDate($dateString);
-    }
-
-    private function createDate(string $dateString): DateTimeImmutable
-    {
-        $date = DateTimeImmutable::createFromFormat('Y-m-d', $dateString);
-
-        if ($date === false) {
-            throw new InvalidArgumentException('Invalid date format, expected Y-m-d.');
+        try {
+            $this->date = $date ? new CarbonImmutable($date) : null;
+        } catch (Throwable $e) {
+            throw new InvalidArgumentException('Invalid date format.');
         }
-
-        return $date;
     }
 
-    public function toString(): string
+    public function getDate(): CarbonImmutable
     {
-        return $this->date->format('Y-m-d');
+        return $this->date;
     }
 
-    public function isEqual(Date $other): bool
+    public function equals(Date $otherDate): bool
     {
-        return $this->date == $other->date;
+        return $this->date->eq($otherDate->getDate());
+    }
+
+    public function isBefore(Date $otherDate): bool
+    {
+        return $this->date->lt($otherDate->getDate()); 
+    }
+
+    public function isAfter(Date $otherDate): bool
+    {
+        return $this->date->gt($otherDate->getDate()); 
+    }
+
+    public function format(string $format = 'Y-m-d'): string
+    {
+        return $this->date->format($format);
+    }
+
+    public function addDays(int $days): Date
+    {
+        return new self($this->date->addDays($days));
+    }
+
+    public function subDays(int $days): Date
+    {
+        return new self($this->date->subDays($days));
     }
 }

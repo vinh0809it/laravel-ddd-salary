@@ -4,7 +4,6 @@ namespace Tests\Feature\User;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
-use Mockery;
 use Src\User\Infrastructure\EloquentModels\UserEloquentModel;
 use Tests\TestCase;
 
@@ -68,11 +67,5 @@ class DeleteUserTest extends TestCase
 
         // Assertions
          $response->assertStatus(Response::HTTP_NOT_FOUND);
-    }
-
-    protected function tearDown(): void
-    {
-        Mockery::close();
-        parent::tearDown();
     }
 }

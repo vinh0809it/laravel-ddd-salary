@@ -1,13 +1,11 @@
 <?php
-
 namespace Src\Common\Domain\Exceptions;
 
 use Illuminate\Http\Response;
-use Src\Common\Domain\Exceptions\DomainException;
 
-final class IncorrectEmailFormatException extends DomainException
+final class ValueRequiredException extends DomainException
 {
-    public function __construct(string $message = 'Email is not valid.')
+    public function __construct(string $message)
     {
         $this->httpCode = Response::HTTP_UNPROCESSABLE_ENTITY;
         parent::__construct($message);

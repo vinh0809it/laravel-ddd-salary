@@ -1,7 +1,7 @@
 <?php
-namespace Src\User\Domain\Model\ValueObjects;
+namespace Src\User\Domain\ValueObjects;
 
-use Src\Common\Domain\Exceptions\RequiredException;
+use Src\Common\Domain\Exceptions\ValueRequiredException;
 
 final class Name
 {
@@ -10,18 +10,13 @@ final class Name
     public function __construct(?string $name)
     {
         if (!$name) {
-            throw new RequiredException('name');
+            throw new ValueRequiredException('name');
         }
 
         $this->name = $name;
     }
 
     public function __toString(): string
-    {
-        return $this->name;
-    }
-
-    public function jsonSerialize(): string
     {
         return $this->name;
     }

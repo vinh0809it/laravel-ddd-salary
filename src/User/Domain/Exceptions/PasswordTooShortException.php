@@ -2,12 +2,14 @@
 
 namespace Src\User\Domain\Exceptions;
 
-use DomainException;
+use Illuminate\Http\Response;
+use Src\Common\Domain\Exceptions\DomainException;
 
 final class PasswordTooShortException extends DomainException
 {
-    public function __construct()
+    public function __construct(string $message = 'The password needs to be at least 8 characters long')
     {
-        parent::__construct('The password needs to be at least 8 characters long');
+        $this->httpCode = Response::HTTP_UNPROCESSABLE_ENTITY;
+        parent::__construct($message);
     }
 }

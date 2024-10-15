@@ -2,13 +2,13 @@
 
 namespace Src\SalaryHistory\Infrastructure\Repositories;
 
-use Src\Common\Application\DTOs\PageMetaDTO;
-use Src\Common\Infrastructure\BaseRepository;
+use Src\Shared\Application\DTOs\PageMetaDTO;
+use Src\Shared\Infrastructure\BaseRepository;
 use Src\SalaryHistory\Application\DTOs\SalaryHistoryFilterDTO;
 use Src\SalaryHistory\Application\DTOs\SalaryHistoryWithPageMetaDTO;
 use Src\SalaryHistory\Domain\Factories\SalaryHistoryFactory;
 use Src\SalaryHistory\Domain\Repositories\ISalaryHistoryRepository;
-use Src\SalaryHistory\Domain\Model\SalaryHistory;
+use Src\SalaryHistory\Domain\Entities\SalaryHistory;
 use Src\SalaryHistory\Infrastructure\EloquentModels\SalaryHistoryEloquentModel;
 
 class SalaryHistoryRepository extends BaseRepository implements ISalaryHistoryRepository
@@ -32,16 +32,23 @@ class SalaryHistoryRepository extends BaseRepository implements ISalaryHistoryRe
             ->exists();
     }
 
-    public function getSalaryHistories(SalaryHistoryFilterDTO $filter, PageMetaDTO $pageMetaDTO): SalaryHistoryWithPageMetaDTO
+    public function getSalaryHistories(SalaryHistoryFilterDTO $filterDTO, PageMetaDTO $pageMetaDTO): SalaryHistoryWithPageMetaDTO
     {
-        $query = $this->model->query();
+        $query = $this->model->select(
+            'id',
+            'user_id',
+            'on_date',
+            'salary',
+            'currency',
+            'note'
+        );
 
-        if($filter->userId) {
-            $query->where('user_id', $filter->userId);
+        if($filterDTO->userId) {
+            $query->where('user_id', $filterDTO->userId);
         }
        
-        if($filter->dateRange) {
-            $query->whereBetween('on_date', $filter->dateRange->toArray());
+        if($filterDTO->dateRange) {
+            $query->whereBetween('on_date', $filterDTO->dateRange->toArray());
         }
 
         $query->orderBy($pageMetaDTO->sort, $pageMetaDTO->sortDirection);

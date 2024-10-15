@@ -23,7 +23,7 @@
     },
     "autoload": {
         "files": [
-            "src/Common/Infrastructure/helpers.php"
+            "src/Shared/Infrastructure/helpers.php"
         ],
         "psr-4": {
             "Src\\": "src/",

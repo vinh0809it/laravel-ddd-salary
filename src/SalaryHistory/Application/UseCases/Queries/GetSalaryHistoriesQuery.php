@@ -2,7 +2,7 @@
 
 namespace Src\SalaryHistory\Application\UseCases\Queries;
 
-use Src\Common\Application\DTOs\PageMetaDTO;
+use Src\Shared\Application\DTOs\PageMetaDTO;
 use Src\SalaryHistory\Application\DTOs\SalaryHistoryFilterDTO;
 use Src\SalaryHistory\Application\DTOs\SalaryHistoryWithPageMetaDTO;
 use Src\SalaryHistory\Domain\Services\SalaryHistoryService;
@@ -19,8 +19,8 @@ class GetSalaryHistoriesQuery
      * 
      * @return SalaryHistoryWithPageMetaDTO
      */
-    public function handle(SalaryHistoryFilterDTO $filter, PageMetaDTO $pageMetaDTO): SalaryHistoryWithPageMetaDTO
+    public function handle(SalaryHistoryFilterDTO $filterDTO, PageMetaDTO $pageMetaDTO): SalaryHistoryWithPageMetaDTO
     {
-        return $this->salaryHistoryService->getSalaryHistories($filter, $pageMetaDTO);
+        return $this->salaryHistoryService->getSalaryHistories($filterDTO, $pageMetaDTO);
     }
 }

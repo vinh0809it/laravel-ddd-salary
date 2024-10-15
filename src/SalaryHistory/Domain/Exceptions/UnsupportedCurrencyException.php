@@ -3,7 +3,7 @@
 namespace Src\SalaryHistory\Domain\Exceptions;
 
 use Illuminate\Http\Response;
-use Src\Common\Domain\Exceptions\DomainException;
+use Src\Shared\Domain\Exceptions\DomainException;
 
 final class UnsupportedCurrencyException extends DomainException
 {

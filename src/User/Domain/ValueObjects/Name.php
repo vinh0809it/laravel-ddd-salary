@@ -1,7 +1,7 @@
 <?php
 namespace Src\User\Domain\ValueObjects;
 
-use Src\Common\Domain\Exceptions\ValueRequiredException;
+use Src\Shared\Domain\Exceptions\ValueRequiredException;
 
 final class Name
 {

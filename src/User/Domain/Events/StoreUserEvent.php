@@ -2,7 +2,7 @@
 
 namespace Src\User\Domain\Events;
 
-use Src\User\Domain\Model\User;
+use Src\User\Domain\Entities\User;
 
 class StoreUserEvent
 {

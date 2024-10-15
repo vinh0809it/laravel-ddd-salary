@@ -38,7 +38,7 @@ class UpdateSalaryHistoryTest extends TestCase
         $this->assertDatabaseHas('salary_histories', $request);
     }
 
-    public function test_updateSalaryHistory_history_unauthorized(): void
+    public function test_updateSalaryHistory_unauthorized(): void
     {
         // Arrange
         $user = UserEloquentModel::factory()->create();

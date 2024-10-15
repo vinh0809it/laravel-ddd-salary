@@ -2,7 +2,7 @@
 
 namespace Src\User\Application\UseCases\Commands;
 
-use Src\User\Domain\Model\User;
+use Src\User\Domain\Entities\User;
 use Src\User\Application\DTOs\UserDTO;
 use Src\User\Domain\Events\StoreUserEvent;
 use Src\User\Domain\Services\UserService;

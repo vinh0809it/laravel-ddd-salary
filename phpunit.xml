@@ -29,7 +29,7 @@
     </include>
     <exclude>
       <directory suffix=".php">./vendor</directory>
-      <directory suffix=".php">./src/Common</directory>
+      <directory suffix=".php">./src/Shared</directory>
       <!-- Exclude vendor directory -->
     </exclude>
   </source>

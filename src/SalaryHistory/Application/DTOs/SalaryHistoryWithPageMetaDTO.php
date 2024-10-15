@@ -3,7 +3,7 @@
 namespace Src\SalaryHistory\Application\DTOs;
 
 use Illuminate\Support\Collection;
-use Src\SalaryHistory\Domain\Model\SalaryHistory;
+use Src\SalaryHistory\Domain\Entities\SalaryHistory;
 
 class SalaryHistoryWithPageMetaDTO
 {

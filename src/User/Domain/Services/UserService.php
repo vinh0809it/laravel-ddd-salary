@@ -3,8 +3,8 @@
 namespace Src\User\Domain\Services;
 
 use Illuminate\Support\Collection;
-use Src\Common\Domain\Exceptions\DatabaseException;
-use Src\Common\Domain\Exceptions\EntityNotFoundException;
+use Src\Shared\Domain\Exceptions\DatabaseException;
+use Src\Shared\Domain\Exceptions\EntityNotFoundException;
 use Src\User\Application\DTOs\UserDTO;
 use Src\User\Domain\Factories\UserFactory;
 use Src\User\Domain\ValueObjects\Email;
@@ -49,14 +49,7 @@ class UserService
 
     public function storeUser(UserDTO $userDTO)
     {
-        $user = $this->userFactory->create(
-            $userDTO->id,
-            $userDTO->name,
-            $userDTO->email,
-            $userDTO->password,
-            $userDTO->isAdmin,
-            $userDTO->isActive,
-        );
+        $user = $this->userFactory->fromDTO($userDTO);
         
         try {
             return $this->userRepository->storeUser($user);

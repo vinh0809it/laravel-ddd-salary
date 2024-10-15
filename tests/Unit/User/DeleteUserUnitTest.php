@@ -4,7 +4,7 @@ namespace Tests\Unit\User;
 
 use Mockery;
 use PHPUnit\Framework\TestCase;
-use Src\Common\Domain\Exceptions\DatabaseException;
+use Src\Shared\Domain\Exceptions\DatabaseException;
 use Src\User\Domain\Factories\UserFactory;
 use Src\User\Domain\Repositories\IUserRepository;
 use Src\User\Domain\Services\UserService;

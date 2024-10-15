@@ -6,8 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Src\User\Application\UseCases\Commands\StoreUserCommand;
 use Src\User\Application\UseCases\Commands\UpdateUserCommand;
-use Src\Common\Domain\Services\AuthorizationServiceInterface;
-use Src\Common\Presentation\BaseController;
+use Src\Shared\Domain\Services\AuthorizationServiceInterface;
+use Src\Shared\Presentation\BaseController;
 use Src\User\Application\DTOs\UserDTO;
 use Src\User\Application\UseCases\Commands\DeleteUserCommand;
 use Src\User\Application\UseCases\Queries\GetUsersQuery;
@@ -24,7 +24,9 @@ class UserController extends BaseController
         // Pls ignore this auth, I'm not going to implement authentication for this app
         // Just mock it to let the authorizationService work.
         $user = UserEloquentModel::where('is_admin', true)->first();
-        Auth::login($user);
+        if($user) {
+            Auth::login($user);
+        }
     }
 
     /**
@@ -88,10 +90,9 @@ class UserController extends BaseController
     {
         try {
             $this->authorizationService->authorize('user.update');
-
+           
             $userDTO = UserDTO::fromRequest($request, $id);
             $updateUserCommand->execute($userDTO);
-
             return $this->sendResponse();
 
         } catch (Throwable $e) {

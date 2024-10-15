@@ -4,11 +4,11 @@ namespace Tests\Unit\SalaryHistory;
 
 use Mockery;
 use PHPUnit\Framework\TestCase;
-use Src\Common\Domain\Exceptions\DatabaseException;
-use Src\Common\Domain\ValueObjects\Date;
+use Src\Shared\Domain\Exceptions\DatabaseException;
+use Src\Shared\Domain\ValueObjects\Date;
 use Src\SalaryHistory\Application\DTOs\UpdateSalaryHistoryDTO;
 use Src\SalaryHistory\Domain\Factories\SalaryHistoryFactory;
-use Src\SalaryHistory\Domain\Model\SalaryHistory;
+use Src\SalaryHistory\Domain\Entities\SalaryHistory;
 use Src\SalaryHistory\Domain\ValueObjects\Salary;
 use Src\SalaryHistory\Domain\Repositories\ISalaryHistoryRepository;
 use Src\SalaryHistory\Domain\Services\SalaryHistoryService;
@@ -38,7 +38,7 @@ class UpdateSalaryHistoryUnitTest extends TestCase
         // Arrange
         $salaryHistory = Mockery::mock(SalaryHistory::class);
 
-        $updateDTO = UpdateSalaryHistoryDTO::create(
+        $dto = UpdateSalaryHistoryDTO::create(
             id: 1, 
             onDate: Date::fromString('2024-10-11'),
             salary: Salary::fromValue(10000000),
@@ -48,7 +48,7 @@ class UpdateSalaryHistoryUnitTest extends TestCase
 
         $this->salaryHistoryRepository->shouldReceive('findSalaryHistoryById')
             ->once()
-            ->with($updateDTO->id)
+            ->with($dto->id)
             ->andReturn($salaryHistory);
 
         $salaryHistory->shouldReceive('setDate')
@@ -70,7 +70,7 @@ class UpdateSalaryHistoryUnitTest extends TestCase
         $salaryHistoryService = new SalaryHistoryService($this->salaryHistoryFactory, $this->salaryHistoryRepository);
 
         // Act
-        $salaryHistoryService->updateSalaryHistory($updateDTO);
+        $salaryHistoryService->updateSalaryHistory($dto);
 
         // Assertions
         $this->assertTrue(true);

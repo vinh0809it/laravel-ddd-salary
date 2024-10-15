@@ -2,8 +2,7 @@
 namespace Src\SalaryHistory\Application\DTOs;
 
 use Illuminate\Http\Request;
-use Src\Common\Domain\ValueObjects\Date;
-use Src\Common\Domain\ValueObjects\DateRange;
+use Src\Shared\Domain\ValueObjects\DateRange;
 
 class SalaryHistoryFilterDTO
 {

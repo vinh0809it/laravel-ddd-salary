@@ -36,6 +36,7 @@ class GetSalaryHistoryRequest extends FormRequest
         return [
             'from_date.required_with' => __('Both from date and to date must be provided together.'),
             'to_date.required_with' => __('Both from date and to date must be provided together.'),
+            'to_date.after_or_equal' => __('From date must be before or equal to to date.'),
             'from_date.*' => __('Date is not valid.'),
             'to_date.*' => __('Date is not valid.'),
         ];

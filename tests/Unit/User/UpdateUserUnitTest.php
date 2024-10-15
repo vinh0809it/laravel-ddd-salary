@@ -4,10 +4,10 @@ namespace Tests\Unit\User;
 
 use Mockery;
 use PHPUnit\Framework\TestCase;
-use Src\Common\Domain\Exceptions\DatabaseException;
+use Src\Shared\Domain\Exceptions\DatabaseException;
 use Src\User\Application\DTOs\UserDTO;
 use Src\User\Domain\Factories\UserFactory;
-use Src\User\Domain\Model\User;
+use Src\User\Domain\Entities\User;
 use Src\User\Domain\ValueObjects\Email;
 use Src\User\Domain\ValueObjects\Name;
 use Src\User\Domain\Repositories\IUserRepository;

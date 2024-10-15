@@ -5,7 +5,7 @@ namespace Src\User\Application\Listeners;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Src\User\Domain\Events\StoreUserEvent;
-use Src\User\Domain\Model\User;
+use Src\User\Domain\Entities\User;
 
 class StoreUserListener
 {

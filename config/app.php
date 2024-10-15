@@ -163,18 +163,18 @@ return [
         /*
          * Application Service Providers...
          */
-        Src\Common\Infrastructure\Laravel\Providers\AppServiceProvider::class,
-        Src\Common\Infrastructure\Laravel\Providers\AuthServiceProvider::class,
-        // Src\Common\Infrastructure\Laravel\Providers\BroadcastServiceProvider::class,
-        Src\Common\Infrastructure\Laravel\Providers\EventServiceProvider::class,
-        Src\Common\Infrastructure\Laravel\Providers\RouteServiceProvider::class,
+        Src\Shared\Infrastructure\Laravel\Providers\AppServiceProvider::class,
+        Src\Shared\Infrastructure\Laravel\Providers\AuthServiceProvider::class,
+        // Src\Shared\Infrastructure\Laravel\Providers\BroadcastServiceProvider::class,
+        Src\Shared\Infrastructure\Laravel\Providers\EventServiceProvider::class,
+        Src\Shared\Infrastructure\Laravel\Providers\RouteServiceProvider::class,
 
         /*
          * Domain Service Providers...
          */
         
-        //  Common
-        \Src\Common\Application\Providers\AuthorizationServiceProvider::class,
+        //  Shared
+        \Src\Shared\Application\Providers\AuthorizationServiceProvider::class,
 
         // User
         \Src\User\Application\Providers\UserServiceProvider::class,

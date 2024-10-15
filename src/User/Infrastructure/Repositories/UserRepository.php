@@ -4,8 +4,8 @@ namespace Src\User\Infrastructure\Repositories;
 
 use Illuminate\Support\Collection;
 use Src\User\Domain\Factories\UserFactory;
-use Src\Common\Infrastructure\BaseRepository;
-use Src\User\Domain\Model\User;
+use Src\Shared\Infrastructure\BaseRepository;
+use Src\User\Domain\Entities\User;
 use Src\User\Domain\Repositories\IUserRepository;
 use Src\User\Infrastructure\EloquentModels\UserEloquentModel;
 
@@ -29,6 +29,7 @@ class UserRepository extends BaseRepository implements IUserRepository
                     'id',
                     'email',
                     'name',
+                    'password',
                     'is_admin',
                     'is_active'
             );
@@ -41,15 +42,16 @@ class UserRepository extends BaseRepository implements IUserRepository
             $query->where('name', 'LIKE', "%$name%");
         }
 
-        return $query->get()->map(function ($userEloquent) {
-            return $this->userFactory->fromEloquent($userEloquent);
+        return $query->get()->map(function ($eloquent) {
+            
+            return $this->userFactory->fromEloquent($eloquent);
         });
     }
 
     public function findUserById(string $id): User
     {
-        $userEloquent = $this->model->find($id);
-        return $this->userFactory->fromEloquent($userEloquent);
+        $eloquent = $this->model->find($id);
+        return $this->userFactory->fromEloquent($eloquent);
     }
 
     public function emailExists(string $email): bool

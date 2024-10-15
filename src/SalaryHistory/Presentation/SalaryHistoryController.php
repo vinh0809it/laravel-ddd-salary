@@ -2,12 +2,12 @@
 
 namespace Src\SalaryHistory\Presentation;
 
-use Src\Common\Presentation\BaseController;
+use Src\Shared\Presentation\BaseController;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
-use Src\Common\Application\DTOs\PageMetaDTO;
-use Src\Common\Domain\Services\AuthorizationServiceInterface;
-use Src\SalaryHistory\Application\DTOs\SalaryHistoryDTO;
+use Src\Shared\Application\DTOs\PageMetaDTO;
+use Src\Shared\Domain\Services\AuthorizationServiceInterface;
+use Src\SalaryHistory\Application\DTOs\StoreSalaryHistoryDTO;
 use Src\SalaryHistory\Application\DTOs\SalaryHistoryFilterDTO;
 use Src\SalaryHistory\Application\DTOs\UpdateSalaryHistoryDTO;
 use Src\SalaryHistory\Presentation\Requests\StoreSalaryHistoryRequest;
@@ -32,7 +32,9 @@ class SalaryHistoryController extends BaseController
         // Pls ignore this auth, I'm not going to implement authentication for this app
         // Just mock it to let the authorizationService work.
         $user = UserEloquentModel::where('is_admin', true)->first();
-        Auth::login($user);
+        if($user) {
+            Auth::login($user);
+        }
     }
 
     /**
@@ -69,10 +71,10 @@ class SalaryHistoryController extends BaseController
         try {
             $this->authorizationService->authorize('salary_history.store');
            
-            $salaryHistoryDTO = SalaryHistoryDTO::fromRequest($request);
-            $salaryHistory = $this->storeSalaryHistoryCommand->execute($salaryHistoryDTO);
+            $dto = StoreSalaryHistoryDTO::fromRequest($request);
+            $salaryHistory = $this->storeSalaryHistoryCommand->execute($dto);
             
-            $response = SalaryHistoryDTO::toResponse($salaryHistory);
+            $response = StoreSalaryHistoryDTO::toResponse($salaryHistory);
 
             return $this->sendResponse(
                 result: $response, 
@@ -95,9 +97,8 @@ class SalaryHistoryController extends BaseController
     {
         try {
             $this->authorizationService->authorize('salary_history.update');
-            $updateSalaryHistoryDTO = UpdateSalaryHistoryDTO::fromRequest($request, $id);
-           
-            $this->updateSalaryHistoryCommand->execute($updateSalaryHistoryDTO);
+            $dto = UpdateSalaryHistoryDTO::fromRequest($request, $id);
+            $this->updateSalaryHistoryCommand->execute($dto);
 
             return $this->sendResponse(
                 result: null, 

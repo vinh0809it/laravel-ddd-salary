@@ -1,8 +1,9 @@
 <?php
 namespace Src\User\Domain\Factories;
 
-use Src\Common\Domain\Exceptions\FactoryException;
-use Src\User\Domain\Model\User;
+use Src\Shared\Domain\Exceptions\FactoryException;
+use Src\User\Application\DTOs\UserDTO;
+use Src\User\Domain\Entities\User;
 use Src\User\Domain\ValueObjects\Email;
 use Src\User\Domain\ValueObjects\Name;
 use Src\User\Domain\ValueObjects\Password;
@@ -34,29 +35,36 @@ class UserFactory
             );
 
         } catch(Throwable $e) {
-            throw new FactoryException();
+            throw new FactoryException('Error creating User: ' . $e->getMessage());
         }
     }
 
+    public function fromDTO(UserDTO $dto): User
+    {
+        return $this->create(
+            id: $dto->id,
+            name: $dto->name,
+            email: $dto->email,
+            password: $dto->password,
+            isAdmin: $dto->isAdmin,
+            isActive: $dto->isActive,
+        );
+    }
+    
     /**
      * @param UserEloquentModel $userEloquent
      * 
      * @return User
      */
-    public function fromEloquent(UserEloquentModel $userEloquent): User
+    public function fromEloquent(UserEloquentModel $eloquent): User
     {
-        try {
-            return new User(
-                id: $userEloquent->id,
-                name: new Name($userEloquent->name),
-                email: new Email($userEloquent->email),
-                password: new Password($userEloquent->password),
-                isAdmin: $userEloquent->is_admin,
-                isActive: $userEloquent->is_active,
-            );
-
-        } catch(Throwable $e) {
-            throw new FactoryException();
-        }
+        return $this->create(
+            id: $eloquent->id,
+            name: $eloquent->name,
+            email: $eloquent->email,
+            password: $eloquent->password,
+            isAdmin: $eloquent->is_admin,
+            isActive: $eloquent->is_active,
+        );
     }
 }

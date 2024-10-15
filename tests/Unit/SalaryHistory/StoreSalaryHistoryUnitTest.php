@@ -5,11 +5,11 @@ namespace Tests\Unit\SalaryHistory;
 use Carbon\Carbon;
 use Mockery;
 use PHPUnit\Framework\TestCase;
-use Src\Common\Domain\ValueObjects\Date;
-use Src\SalaryHistory\Application\DTOs\SalaryHistoryDTO;
+use Src\Shared\Domain\ValueObjects\Date;
+use Src\SalaryHistory\Application\DTOs\StoreSalaryHistoryDTO;
 use Src\SalaryHistory\Domain\Exceptions\UserHasSalaryRecordInYearException;
 use Src\SalaryHistory\Domain\Factories\SalaryHistoryFactory;
-use Src\SalaryHistory\Domain\Model\SalaryHistory;
+use Src\SalaryHistory\Domain\Entities\SalaryHistory;
 use Src\SalaryHistory\Domain\ValueObjects\Salary;
 use Src\SalaryHistory\Domain\Repositories\ISalaryHistoryRepository;
 use Src\SalaryHistory\Domain\Services\SalaryHistoryService;
@@ -17,7 +17,6 @@ use Src\SalaryHistory\Domain\ValueObjects\Currency;
 
 class StoreSalaryHistoryUnitTest extends TestCase
 {
-
     private $salaryHistoryFactory;
     private $salaryHistoryRepository;
 
@@ -93,7 +92,7 @@ class StoreSalaryHistoryUnitTest extends TestCase
     public function test_storeSalaryHistory_failed_when_user_has_record_in_year(): void
     {
         // Arrange
-        $salaryHistoryDTO = new SalaryHistoryDTO(
+        $dto = new StoreSalaryHistoryDTO(
             id: null,
             userId: 1,
             onDate: '2024-10-06',
@@ -102,11 +101,11 @@ class StoreSalaryHistoryUnitTest extends TestCase
             note: 'Testing'
         );
 
-        $currentYear = Carbon::parse($salaryHistoryDTO->onDate)->format('Y');
+        $currentYear = Carbon::parse($dto->onDate)->format('Y');
 
         $this->salaryHistoryRepository->shouldReceive('existsForUserInYear')
             ->once()
-            ->with($salaryHistoryDTO->userId, $currentYear)
+            ->with($dto->userId, $currentYear)
             ->andReturn(true);
 
         $salaryHistoryService = new SalaryHistoryService($this->salaryHistoryFactory, $this->salaryHistoryRepository);
@@ -116,7 +115,7 @@ class StoreSalaryHistoryUnitTest extends TestCase
         $this->expectExceptionMessage('User already has a record for this year.');
 
         // Act
-        $salaryHistoryService->storeSalaryHistory($salaryHistoryDTO);
+        $salaryHistoryService->storeSalaryHistory($dto);
     }
 
     /**
@@ -134,7 +133,7 @@ class StoreSalaryHistoryUnitTest extends TestCase
             note: 'Testing'
         );
 
-        $salaryHistoryDTO = new SalaryHistoryDTO(
+        $dto = new StoreSalaryHistoryDTO(
             id: null,
             userId: 1,
             onDate: '2024-10-06',
@@ -143,15 +142,16 @@ class StoreSalaryHistoryUnitTest extends TestCase
             note: 'Testing'
         );
 
-        $currentYear = Carbon::parse($salaryHistoryDTO->onDate)->format('Y');
+        $currentYear = Carbon::parse($dto->onDate)->format('Y');
 
         $this->salaryHistoryRepository->shouldReceive('existsForUserInYear')
             ->once()
-            ->with($salaryHistoryDTO->userId, $currentYear)
+            ->with($dto->userId, $currentYear)
             ->andReturn(false);
 
-        $this->salaryHistoryFactory->shouldReceive('create')
+        $this->salaryHistoryFactory->shouldReceive('fromDTO')
             ->once()
+            ->with($dto)
             ->andReturn($salaryHistory);
 
         $this->salaryHistoryRepository->shouldReceive('storeSalaryHistory')
@@ -162,7 +162,7 @@ class StoreSalaryHistoryUnitTest extends TestCase
         $salaryHistoryService = new SalaryHistoryService($this->salaryHistoryFactory, $this->salaryHistoryRepository);
 
         // Act
-        $result = $salaryHistoryService->storeSalaryHistory($salaryHistoryDTO);
+        $result = $salaryHistoryService->storeSalaryHistory($dto);
 
         // Assertions
         $this->assertInstanceOf(SalaryHistory::class, $result);

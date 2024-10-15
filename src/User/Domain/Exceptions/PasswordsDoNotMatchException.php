@@ -3,7 +3,7 @@
 namespace Src\User\Domain\Exceptions;
 
 use Illuminate\Http\Response;
-use Src\Common\Domain\Exceptions\DomainException;
+use Src\Shared\Domain\Exceptions\DomainException;
 
 final class PasswordsDoNotMatchException extends DomainException
 {

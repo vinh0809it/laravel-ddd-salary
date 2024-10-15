@@ -3,7 +3,7 @@
 namespace Src\SalaryHistory\Application\DTOs;
 
 use Illuminate\Http\Request;
-use Src\Common\Domain\ValueObjects\Date;
+use Src\Shared\Domain\ValueObjects\Date;
 use Src\SalaryHistory\Domain\ValueObjects\Currency;
 use Src\SalaryHistory\Domain\ValueObjects\Salary;
 

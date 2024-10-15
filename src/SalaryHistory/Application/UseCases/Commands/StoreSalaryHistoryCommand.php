@@ -2,8 +2,8 @@
 
 namespace Src\SalaryHistory\Application\UseCases\Commands;
 
-use Src\SalaryHistory\Application\DTOs\SalaryHistoryDTO;
-use Src\SalaryHistory\Domain\Model\SalaryHistory;
+use Src\SalaryHistory\Application\DTOs\StoreSalaryHistoryDTO;
+use Src\SalaryHistory\Domain\Entities\SalaryHistory;
 use Src\SalaryHistory\Domain\Services\SalaryHistoryService;
 
 class StoreSalaryHistoryCommand
@@ -13,8 +13,9 @@ class StoreSalaryHistoryCommand
     )
     {}
 
-    public function execute(SalaryHistoryDTO $salaryHistoryDTO): SalaryHistory
+    public function execute(StoreSalaryHistoryDTO $dto): SalaryHistory
     {
-        return $this->salaryHistoryService->storeSalaryHistory($salaryHistoryDTO);
+        // Dispatch event here
+        return $this->salaryHistoryService->storeSalaryHistory($dto);
     }
 }

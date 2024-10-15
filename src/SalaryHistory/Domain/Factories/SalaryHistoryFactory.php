@@ -1,12 +1,12 @@
 <?php
 namespace Src\SalaryHistory\Domain\Factories;
 
-use Src\Common\Domain\Exceptions\FactoryException;
-use Src\Common\Domain\ValueObjects\Date;
-use Src\SalaryHistory\Application\DTOs\SalaryHistoryDTO;
+use Src\Shared\Domain\Exceptions\FactoryException;
+use Src\Shared\Domain\ValueObjects\Date;
+use Src\SalaryHistory\Application\DTOs\StoreSalaryHistoryDTO;
 use Src\SalaryHistory\Domain\ValueObjects\Salary;
 use Src\SalaryHistory\Infrastructure\EloquentModels\SalaryHistoryEloquentModel;
-use Src\SalaryHistory\Domain\Model\SalaryHistory;
+use Src\SalaryHistory\Domain\Entities\SalaryHistory;
 use Src\SalaryHistory\Domain\ValueObjects\Currency;
 use Throwable;
 
@@ -21,7 +21,7 @@ class SalaryHistoryFactory
      * 
      * @return SalaryHistory
      */
-    public function create(?string $id, string $userId, string $onDate, float $salary, string $currency, ?string $note): SalaryHistory
+    public function create(?string $id, string $userId, string $onDate, float $salary, string $currency, ?string $note = null): SalaryHistory
     {
         try {
             return new SalaryHistory(
@@ -40,26 +40,20 @@ class SalaryHistoryFactory
     }
 
     /**
-     * @param SalaryHistoryDTO $dto
+     * @param StoreSalaryHistoryDTO $dto
      * 
      * @return SalaryHistory
      */
-    public function createFromDTO(SalaryHistoryDTO $dto): SalaryHistory
+    public function fromDTO(StoreSalaryHistoryDTO $dto): SalaryHistory
     {
-        try {
-            return new SalaryHistory(
-                id: $dto->id,
-                userId: $dto->userId,
-                onDate: Date::fromString($dto->onDate),
-                salary: Salary::fromValue($dto->salary),
-                currency: Currency::fromString($dto->currency),
-                note: $dto->note
-            );
-
-        } catch(Throwable $e) {
-            
-            throw new FactoryException('Error creating SalaryHistory from DTO: ' . $e->getMessage());
-        }
+        return $this->create(
+            id: $dto->id,
+            userId: $dto->userId,
+            onDate: $dto->onDate,
+            salary: $dto->salary,
+            currency: $dto->currency,
+            note: $dto->note
+        );
     }
 
     /**
@@ -67,20 +61,15 @@ class SalaryHistoryFactory
      * 
      * @return SalaryHistory
      */
-    public function fromEloquent(SalaryHistoryEloquentModel $salaryHistoryEloquent): SalaryHistory
+    public function fromEloquent(SalaryHistoryEloquentModel $eloquent): SalaryHistory
     {
-        try {
-            return new SalaryHistory(
-                id: $salaryHistoryEloquent->id,
-                userId: $salaryHistoryEloquent->user_id,
-                onDate: Date::fromString($salaryHistoryEloquent->on_date),
-                salary: Salary::fromValue($salaryHistoryEloquent->salary),
-                currency: Currency::fromString($salaryHistoryEloquent->currency),
-                note: $salaryHistoryEloquent->note
-            );
-
-        } catch(Throwable $e) {
-            throw new FactoryException('Error creating SalaryHistory from Eloquent: ' . $e->getMessage());
-        }
+        return $this->create(
+            id: $eloquent->id,
+            userId: $eloquent->user_id,
+            onDate: $eloquent->on_date,
+            salary: $eloquent->salary,
+            currency: $eloquent->currency,
+            note: $eloquent->note
+        );
     }
 }

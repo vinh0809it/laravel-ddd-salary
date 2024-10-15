@@ -12,8 +12,8 @@ class UpdateSalaryHistoryCommand
     )
     {}
 
-    public function execute(UpdateSalaryHistoryDTO $updateSalaryHistoryDTO): void
+    public function execute(UpdateSalaryHistoryDTO $dto): void
     {
-        $this->salaryHistoryService->updateSalaryHistory($updateSalaryHistoryDTO);
+        $this->salaryHistoryService->updateSalaryHistory($dto);
     }
 }

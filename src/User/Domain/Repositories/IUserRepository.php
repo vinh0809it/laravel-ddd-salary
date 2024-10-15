@@ -3,8 +3,8 @@
 namespace Src\User\Domain\Repositories;
 
 use Illuminate\Support\Collection;
-use Src\Common\Domain\IBaseRepository;
-use Src\User\Domain\Model\User;
+use Src\Shared\Domain\IBaseRepository;
+use Src\User\Domain\Entities\User;
 
 interface IUserRepository extends IBaseRepository
 {

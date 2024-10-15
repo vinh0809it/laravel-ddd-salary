@@ -4,16 +4,16 @@ namespace Src\SalaryHistory\Domain\Services;
 
 use Carbon\Carbon;
 use Throwable;
-use Src\Common\Application\DTOs\PageMetaDTO;
-use Src\Common\Domain\Exceptions\DatabaseException;
-use Src\Common\Domain\Exceptions\EntityNotFoundException;
+use Src\Shared\Application\DTOs\PageMetaDTO;
+use Src\Shared\Domain\Exceptions\DatabaseException;
+use Src\Shared\Domain\Exceptions\EntityNotFoundException;
 use Src\SalaryHistory\Domain\Exceptions\UserHasSalaryRecordInYearException;
-use Src\SalaryHistory\Application\DTOs\SalaryHistoryDTO;
+use Src\SalaryHistory\Application\DTOs\StoreSalaryHistoryDTO;
 use Src\SalaryHistory\Application\DTOs\SalaryHistoryFilterDTO;
 use Src\SalaryHistory\Application\DTOs\SalaryHistoryWithPageMetaDTO;
 use Src\SalaryHistory\Application\DTOs\UpdateSalaryHistoryDTO;
 use Src\SalaryHistory\Domain\Factories\SalaryHistoryFactory;
-use Src\SalaryHistory\Domain\Model\SalaryHistory;
+use Src\SalaryHistory\Domain\Entities\SalaryHistory;
 use Src\SalaryHistory\Domain\Repositories\ISalaryHistoryRepository;
 
 class SalaryHistoryService
@@ -24,15 +24,15 @@ class SalaryHistoryService
     ) {}
 
     /**
-     * @param SalaryHistoryFilterDTO $filter
+     * @param SalaryHistoryFilterDTO $filterDTO
      * @param PageMetaDTO $pageMetaDTO
      * 
      * @return SalaryHistoryWithPageMetaDTO
      */
-    public function getSalaryHistories(SalaryHistoryFilterDTO $filter, PageMetaDTO $pageMetaDTO): SalaryHistoryWithPageMetaDTO
+    public function getSalaryHistories(SalaryHistoryFilterDTO $filterDTO, PageMetaDTO $pageMetaDTO): SalaryHistoryWithPageMetaDTO
     {
         try {
-            return $this->salaryHistoryRepository->getSalaryHistories($filter, $pageMetaDTO);
+            return $this->salaryHistoryRepository->getSalaryHistories($filterDTO, $pageMetaDTO);
         } catch (Throwable $e) {
             throw new DatabaseException('Failed to fetch salary histories: ' . $e->getMessage());
         }
@@ -50,11 +50,11 @@ class SalaryHistoryService
     }
 
     /**
-     * @param SalaryHistoryDTO $salaryHistoryDTO
+     * @param StoreSalaryHistoryDTO $dto
      * 
      * @return SalaryHistory
      */
-    public function storeSalaryHistory(SalaryHistoryDTO $dto): SalaryHistory
+    public function storeSalaryHistory(StoreSalaryHistoryDTO $dto): SalaryHistory
     {
         $currentYear = Carbon::parse($dto->onDate)->format('Y');
 
@@ -66,15 +66,8 @@ class SalaryHistoryService
         if (!$canStoreSalaryHistory) {
             throw new UserHasSalaryRecordInYearException();
         }
- 
-        $salaryHistory = $this->salaryHistoryFactory->create(
-            $dto->id,
-            $dto->userId,
-            $dto->onDate,
-            $dto->salary,
-            $dto->currency,
-            $dto->note
-        );
+
+        $salaryHistory = $this->salaryHistoryFactory->fromDTO($dto);
 
         try {
             return $this->salaryHistoryRepository->storeSalaryHistory($salaryHistory);

@@ -2,7 +2,7 @@
 namespace Src\SalaryHistory\Domain\ValueObjects;
 
 use Src\SalaryHistory\Domain\Exceptions\InvalidSalaryException;
-use Src\Common\Domain\Exceptions\ValueRequiredException;
+use Src\Shared\Domain\Exceptions\ValueRequiredException;
 
 final class Salary
 {

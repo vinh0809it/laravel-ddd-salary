@@ -17,7 +17,7 @@ class StoreUserCommand
     public function execute(UserDTO $userDTO): User
     {
         $userEntity = $this->userService->storeUser($userDTO);
-        event(new StoreUserEvent($userEntity));
+        event(new StoreUserEvent($userEntity->id));
 
         return $userEntity;
     }

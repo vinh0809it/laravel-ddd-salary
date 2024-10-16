@@ -8,6 +8,8 @@ use Src\SalaryHistory\Domain\ValueObjects\Salary;
 
 class SalaryHistory extends AggregateRoot
 {
+    private array $adjustments = [];
+
     public function __construct(
         private ?string $id,
         private string $userId,
@@ -17,7 +19,11 @@ class SalaryHistory extends AggregateRoot
         private string $note
     ) {}
 
-    // --- Business logic methods ---
+    public function addAdjustment(SalaryAdjustment $adjustment): void {
+        $this->adjustments[] = $adjustment;
+    }
+
+    // --- Setters ---
 
     public function setDate(Date $newDate): void
     {
@@ -49,7 +55,6 @@ class SalaryHistory extends AggregateRoot
     {
         return $this->userId;
     }
-
 
     public function getOnDate(): Date
     {

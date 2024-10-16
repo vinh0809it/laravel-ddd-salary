@@ -52,6 +52,36 @@ class SalaryHistoryService
     }
 
     /**
+     * @param string $userId
+     * 
+     * @return SalaryHistory
+     */
+    public function storeSalaryHistoryForNewUser(string $userId): SalaryHistory
+    {
+        $toDay = Carbon::today()->format('Y-m-d');
+
+        // These info should be retrieved by user role/position or default
+        $salary = 5000000;
+        $currency = 'VND';
+        $note = 'Initial salary';
+
+        $salaryHistory = $this->salaryHistoryFactory->create(
+            null,
+            $userId,
+            $toDay,
+            $salary,
+            $currency,
+            $note
+        );
+
+        try {
+            return $this->salaryHistoryRepository->storeSalaryHistory($salaryHistory);
+        } catch (Throwable $e) {
+            throw new DatabaseException('Failed to store salary history for new user: ' . $e->getMessage());
+        }
+    }
+
+    /**
      * @param StoreSalaryHistoryDTO $dto
      * 
      * @return SalaryHistory

@@ -11,6 +11,7 @@ use Src\SalaryHistory\Domain\Factories\SalaryHistoryFactory;
 use Src\SalaryHistory\Domain\Entities\SalaryHistory;
 use Src\SalaryHistory\Domain\ValueObjects\Salary;
 use Src\SalaryHistory\Domain\Repositories\ISalaryHistoryRepository;
+use Src\SalaryHistory\Domain\Services\External\IUserDomainService;
 use Src\SalaryHistory\Domain\Services\SalaryHistoryService;
 use Src\SalaryHistory\Domain\ValueObjects\Currency;
 
@@ -18,6 +19,7 @@ class UpdateSalaryHistoryUnitTest extends TestCase
 {
     protected $salaryHistoryFactory;
     protected $salaryHistoryRepository;
+    protected $userDomainService;
 
     protected function tearDown(): void
     {
@@ -31,6 +33,7 @@ class UpdateSalaryHistoryUnitTest extends TestCase
 
         $this->salaryHistoryFactory = Mockery::mock(SalaryHistoryFactory::class);
         $this->salaryHistoryRepository = Mockery::mock(ISalaryHistoryRepository::class);
+        $this->userDomainService = Mockery::mock(IUserDomainService::class);
     }
 
     public function test_updateSalaryHistory_successful(): void
@@ -67,7 +70,11 @@ class UpdateSalaryHistoryUnitTest extends TestCase
             ->once()
             ->with($salaryHistory);
 
-        $salaryHistoryService = new SalaryHistoryService($this->salaryHistoryFactory, $this->salaryHistoryRepository);
+        $salaryHistoryService = new SalaryHistoryService(
+            $this->salaryHistoryFactory, 
+            $this->salaryHistoryRepository,
+            $this->userDomainService
+        );
 
         // Act
         $salaryHistoryService->updateSalaryHistory($dto);
@@ -92,7 +99,11 @@ class UpdateSalaryHistoryUnitTest extends TestCase
             ->with($updateDTO->id)
             ->andThrow(new DatabaseException('Database error'));
 
-        $salaryHistoryService = new SalaryHistoryService($this->salaryHistoryFactory, $this->salaryHistoryRepository);
+        $salaryHistoryService = new SalaryHistoryService(
+            $this->salaryHistoryFactory, 
+            $this->salaryHistoryRepository,
+            $this->userDomainService
+        );
 
         // Assert
         $this->expectException(DatabaseException::class);

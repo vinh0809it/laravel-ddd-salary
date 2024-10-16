@@ -4,11 +4,11 @@ namespace Src\SalaryHistory\Domain\Rules;
 
 use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
-use Src\User\Domain\Services\UserService;
+use Src\SalaryHistory\Domain\Services\External\IUserDomainService;
 
 class UserExistsRule implements ValidationRule
 {
-    public function __construct(private UserService $userService)
+    public function __construct(private IUserDomainService $userDomainService)
     {}
 
     /**
@@ -16,7 +16,7 @@ class UserExistsRule implements ValidationRule
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        if (!$this->userService->userExists($value)) {
+        if (!$this->userDomainService->userExists($value)) {
             $fail('user_id.user_not_existed');
         }
     }

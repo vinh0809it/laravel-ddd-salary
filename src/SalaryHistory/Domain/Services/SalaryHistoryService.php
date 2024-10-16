@@ -15,12 +15,14 @@ use Src\SalaryHistory\Application\DTOs\UpdateSalaryHistoryDTO;
 use Src\SalaryHistory\Domain\Factories\SalaryHistoryFactory;
 use Src\SalaryHistory\Domain\Entities\SalaryHistory;
 use Src\SalaryHistory\Domain\Repositories\ISalaryHistoryRepository;
+use Src\SalaryHistory\Domain\Services\External\IUserDomainService;
 
 class SalaryHistoryService
 {
     public function __construct(
         private SalaryHistoryFactory $salaryHistoryFactory,
-        private ISalaryHistoryRepository $salaryHistoryRepository
+        private ISalaryHistoryRepository $salaryHistoryRepository,
+        private IUserDomainService $userDomainService
     ) {}
 
     /**
@@ -56,6 +58,10 @@ class SalaryHistoryService
      */
     public function storeSalaryHistory(StoreSalaryHistoryDTO $dto): SalaryHistory
     {
+        if(!$this->userDomainService->userExists($dto->userId)) {
+            throw new EntityNotFoundException('The user is not existed.');
+        }
+
         $currentYear = Carbon::parse($dto->onDate)->format('Y');
 
         $canStoreSalaryHistory = $this->canStoreSalaryHistory(

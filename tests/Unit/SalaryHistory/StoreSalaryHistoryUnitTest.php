@@ -12,6 +12,7 @@ use Src\SalaryHistory\Domain\Factories\SalaryHistoryFactory;
 use Src\SalaryHistory\Domain\Entities\SalaryHistory;
 use Src\SalaryHistory\Domain\ValueObjects\Salary;
 use Src\SalaryHistory\Domain\Repositories\ISalaryHistoryRepository;
+use Src\SalaryHistory\Domain\Services\External\IUserDomainService;
 use Src\SalaryHistory\Domain\Services\SalaryHistoryService;
 use Src\SalaryHistory\Domain\ValueObjects\Currency;
 
@@ -19,6 +20,7 @@ class StoreSalaryHistoryUnitTest extends TestCase
 {
     private $salaryHistoryFactory;
     private $salaryHistoryRepository;
+    private $userDomainService;
 
     /**
      * @return void
@@ -38,6 +40,7 @@ class StoreSalaryHistoryUnitTest extends TestCase
 
         $this->salaryHistoryFactory = Mockery::mock(SalaryHistoryFactory::class);
         $this->salaryHistoryRepository = Mockery::mock(ISalaryHistoryRepository::class);
+        $this->userDomainService = Mockery::mock(IUserDomainService::class);
     }
 
     /**
@@ -49,7 +52,11 @@ class StoreSalaryHistoryUnitTest extends TestCase
         $userId = 1;
         $year = 2024;
 
-        $salaryHistoryService = new SalaryHistoryService($this->salaryHistoryFactory, $this->salaryHistoryRepository);
+        $salaryHistoryService = new SalaryHistoryService(
+            $this->salaryHistoryFactory, 
+            $this->salaryHistoryRepository,
+            $this->userDomainService
+        );
 
         $this->salaryHistoryRepository->shouldReceive('existsForUserInYear')
             ->once()
@@ -72,7 +79,11 @@ class StoreSalaryHistoryUnitTest extends TestCase
         $userId = 1;
         $year = 2024;
 
-        $salaryHistoryService = new SalaryHistoryService($this->salaryHistoryFactory, $this->salaryHistoryRepository);
+        $salaryHistoryService = new SalaryHistoryService(
+            $this->salaryHistoryFactory, 
+            $this->salaryHistoryRepository,
+            $this->userDomainService
+        );
 
         $this->salaryHistoryRepository->shouldReceive('existsForUserInYear')
             ->once()
@@ -101,6 +112,11 @@ class StoreSalaryHistoryUnitTest extends TestCase
             note: 'Testing'
         );
 
+        $this->userDomainService->shouldReceive('userExists')
+            ->once()
+            ->with($dto->userId)
+            ->andReturn(true);
+
         $currentYear = Carbon::parse($dto->onDate)->format('Y');
 
         $this->salaryHistoryRepository->shouldReceive('existsForUserInYear')
@@ -108,7 +124,11 @@ class StoreSalaryHistoryUnitTest extends TestCase
             ->with($dto->userId, $currentYear)
             ->andReturn(true);
 
-        $salaryHistoryService = new SalaryHistoryService($this->salaryHistoryFactory, $this->salaryHistoryRepository);
+        $salaryHistoryService = new SalaryHistoryService(
+            $this->salaryHistoryFactory, 
+            $this->salaryHistoryRepository,
+            $this->userDomainService
+        );
 
         // Assertions
         $this->expectException(UserHasSalaryRecordInYearException::class);
@@ -144,6 +164,11 @@ class StoreSalaryHistoryUnitTest extends TestCase
 
         $currentYear = Carbon::parse($dto->onDate)->format('Y');
 
+        $this->userDomainService->shouldReceive('userExists')
+            ->once()
+            ->with($dto->userId)
+            ->andReturn(true);
+
         $this->salaryHistoryRepository->shouldReceive('existsForUserInYear')
             ->once()
             ->with($dto->userId, $currentYear)
@@ -159,7 +184,11 @@ class StoreSalaryHistoryUnitTest extends TestCase
             ->with($salaryHistory)
             ->andReturn($salaryHistory);
 
-        $salaryHistoryService = new SalaryHistoryService($this->salaryHistoryFactory, $this->salaryHistoryRepository);
+        $salaryHistoryService = new SalaryHistoryService(
+            $this->salaryHistoryFactory, 
+            $this->salaryHistoryRepository,
+            $this->userDomainService
+        );
 
         // Act
         $result = $salaryHistoryService->storeSalaryHistory($dto);

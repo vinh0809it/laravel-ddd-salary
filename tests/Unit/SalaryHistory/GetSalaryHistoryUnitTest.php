@@ -12,6 +12,7 @@ use Src\SalaryHistory\Application\DTOs\SalaryHistoryWithPageMetaDTO;
 use Src\SalaryHistory\Domain\Factories\SalaryHistoryFactory;
 use Src\SalaryHistory\Domain\Entities\SalaryHistory;
 use Src\SalaryHistory\Domain\Repositories\ISalaryHistoryRepository;
+use Src\SalaryHistory\Domain\Services\External\IUserDomainService;
 use Src\SalaryHistory\Domain\Services\SalaryHistoryService;
 use Src\SalaryHistory\Domain\ValueObjects\Currency;
 use Src\SalaryHistory\Domain\ValueObjects\Salary;
@@ -21,12 +22,14 @@ class GetSalaryHistoryUnitTest extends TestCase
 {
     private $salaryHistoryFactory;
     private $salaryHistoryRepository;
+    private $userDomainService;
 
     protected function setUp(): void
     {
         parent::setUp();
         $this->salaryHistoryFactory = Mockery::mock(SalaryHistoryFactory::class);
         $this->salaryHistoryRepository = Mockery::mock(ISalaryHistoryRepository::class);
+        $this->userDomainService = Mockery::mock(IUserDomainService::class);
     }
     
     protected function tearDown(): void
@@ -75,7 +78,11 @@ class GetSalaryHistoryUnitTest extends TestCase
             ->with($filterDTO, $pageMetaDTO)
             ->andReturn($resultWithPageMetaDTO);
 
-        $salaryHistoryService = new SalaryHistoryService($this->salaryHistoryFactory, $this->salaryHistoryRepository);
+        $salaryHistoryService = new SalaryHistoryService(
+            $this->salaryHistoryFactory, 
+            $this->salaryHistoryRepository,
+            $this->userDomainService
+        );
 
         // Act
         $result = $salaryHistoryService->getSalaryHistories($filterDTO, $pageMetaDTO);

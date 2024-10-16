@@ -92,17 +92,6 @@ class SalaryHistoryService
             throw new EntityNotFoundException('The user is not existed.');
         }
 
-        $currentYear = Carbon::parse($dto->onDate)->format('Y');
-
-        $canStoreSalaryHistory = $this->canStoreSalaryHistory(
-            $dto->userId, 
-            $currentYear
-        );
-
-        if (!$canStoreSalaryHistory) {
-            throw new UserHasSalaryRecordInYearException();
-        }
-
         $salaryHistory = $this->salaryHistoryFactory->fromDTO($dto);
 
         try {

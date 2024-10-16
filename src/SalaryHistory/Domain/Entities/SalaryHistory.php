@@ -5,6 +5,7 @@ use Src\Shared\Domain\ValueObjects\Date;
 use Src\Shared\Domain\AggregateRoot;
 use Src\SalaryHistory\Domain\ValueObjects\Currency;
 use Src\SalaryHistory\Domain\ValueObjects\Salary;
+use Src\Shared\Domain\Exceptions\ValueRequiredException;
 
 class SalaryHistory extends AggregateRoot
 {
@@ -16,10 +17,27 @@ class SalaryHistory extends AggregateRoot
         private Date $onDate,
         private Salary $salary,
         private Currency $currency,
-        private string $note
-    ) {}
+        private ?string $note
+    ) {
+        if(!$userId) {
+            throw new ValueRequiredException('User Id could not be null.');
+        }
+    }
 
-    public function addAdjustment(SalaryAdjustment $adjustment): void {
+    // Just mock
+    public function calcTotalSalary(): float
+    {
+        $totalSalary = $this->salary->getAmount();
+
+        foreach ($this->adjustments as $adjustment) {
+            $totalSalary += $adjustment->getAmount();   
+        }
+
+        return $totalSalary;
+    }
+
+    public function addAdjustment(SalaryAdjustment $adjustment): void
+    {
         $this->adjustments[] = $adjustment;
     }
 

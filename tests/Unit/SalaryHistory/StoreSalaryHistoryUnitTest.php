@@ -7,7 +7,6 @@ use Mockery;
 use PHPUnit\Framework\TestCase;
 use Src\Shared\Domain\ValueObjects\Date;
 use Src\SalaryHistory\Application\DTOs\StoreSalaryHistoryDTO;
-use Src\SalaryHistory\Domain\Exceptions\UserHasSalaryRecordInYearException;
 use Src\SalaryHistory\Domain\Factories\SalaryHistoryFactory;
 use Src\SalaryHistory\Domain\Entities\SalaryHistory;
 use Src\SalaryHistory\Domain\ValueObjects\Salary;
@@ -100,47 +99,6 @@ class StoreSalaryHistoryUnitTest extends TestCase
     /**
      * @return void
      */
-    public function test_storeSalaryHistory_failed_when_user_has_record_in_year(): void
-    {
-        // Arrange
-        $dto = new StoreSalaryHistoryDTO(
-            id: null,
-            userId: 1,
-            onDate: '2024-10-06',
-            salary: 5000000,
-            currency: 'VND',
-            note: 'Testing'
-        );
-
-        $this->userDomainService->shouldReceive('userExists')
-            ->once()
-            ->with($dto->userId)
-            ->andReturn(true);
-
-        $currentYear = Carbon::parse($dto->onDate)->format('Y');
-
-        $this->salaryHistoryRepository->shouldReceive('existsForUserInYear')
-            ->once()
-            ->with($dto->userId, $currentYear)
-            ->andReturn(true);
-
-        $salaryHistoryService = new SalaryHistoryService(
-            $this->salaryHistoryFactory, 
-            $this->salaryHistoryRepository,
-            $this->userDomainService
-        );
-
-        // Assertions
-        $this->expectException(UserHasSalaryRecordInYearException::class);
-        $this->expectExceptionMessage('User already has a record for this year.');
-
-        // Act
-        $salaryHistoryService->storeSalaryHistory($dto);
-    }
-
-    /**
-     * @return void
-     */
     public function test_storeSalaryHistory_successful_when_user_has_no_record_in_year(): void
     {
         // Arrange
@@ -162,17 +120,10 @@ class StoreSalaryHistoryUnitTest extends TestCase
             note: 'Testing'
         );
 
-        $currentYear = Carbon::parse($dto->onDate)->format('Y');
-
         $this->userDomainService->shouldReceive('userExists')
             ->once()
             ->with($dto->userId)
             ->andReturn(true);
-
-        $this->salaryHistoryRepository->shouldReceive('existsForUserInYear')
-            ->once()
-            ->with($dto->userId, $currentYear)
-            ->andReturn(false);
 
         $this->salaryHistoryFactory->shouldReceive('fromDTO')
             ->once()

@@ -6,6 +6,7 @@ use Illuminate\Support\Collection;
 use Src\Shared\Domain\Exceptions\DatabaseException;
 use Src\Shared\Domain\Exceptions\EntityNotFoundException;
 use Src\User\Application\DTOs\UserDTO;
+use Src\User\Domain\Entities\User;
 use Src\User\Domain\Factories\UserFactory;
 use Src\User\Domain\ValueObjects\Email;
 use Src\User\Domain\ValueObjects\Name;
@@ -60,21 +61,36 @@ class UserService
 
     public function updateUser(UserDTO $userDTO): void
     {
+        $existingUser = $this->getExistingUser($userDTO->id);
+
+        if($userDTO->email) {
+            $existingUser->changeEmail(new Email($userDTO->email));
+        }
+
+        if($userDTO->name) {
+            $existingUser->changeName(new Name($userDTO->name));
+        }
+
         try {
-            $existingUser = $this->userRepository->findUserById($userDTO->id);
-
-            if($userDTO->email) {
-                $existingUser->changeEmail(new Email($userDTO->email));
-            }
-
-            if($userDTO->name) {
-                $existingUser->changeName(new Name($userDTO->name));
-            }
-            
             $this->userRepository->updateUser($existingUser);
             
         } catch (Throwable $e) {
             throw new DatabaseException('Failed to update user: ' . $e->getMessage());
         }
+    }
+
+    public function getExistingUser(string $userId): User
+    {
+        try {
+            $existingUser = $this->userRepository->findUserById($userId);
+        } catch(Throwable $e) {
+            throw new DatabaseException('Failed to get existing user: '.$e->getMessage());
+        }
+
+        if(!$existingUser) {
+            throw new EntityNotFoundException('User is not existed.');
+        }
+
+        return $existingUser;
     }
 }

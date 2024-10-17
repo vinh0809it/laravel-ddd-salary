@@ -48,10 +48,10 @@ class UserRepository extends BaseRepository implements IUserRepository
         });
     }
 
-    public function findUserById(string $id): User
+    public function findUserById(string $id): ?User
     {
         $eloquent = $this->model->find($id);
-        return $this->userFactory->fromEloquent($eloquent);
+        return $eloquent ? $this->userFactory->fromEloquent($eloquent) : null;
     }
 
     public function emailExists(string $email): bool

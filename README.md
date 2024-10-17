@@ -38,6 +38,7 @@ You can contact me via email at vinh0809it@gmail.com
 5. ```php artisan migrate```
 6. ```php artisan db:seed```
 7. ```php artisan test```
+8. ```php artisan serve```
 
 ## 📁 Structure particularities
 

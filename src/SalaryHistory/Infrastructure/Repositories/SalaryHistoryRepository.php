@@ -66,10 +66,10 @@ class SalaryHistoryRepository extends BaseRepository implements ISalaryHistoryRe
         );
     }
     
-    public function findSalaryHistoryById(string $id): SalaryHistory
+    public function findSalaryHistoryById(string $id): ?SalaryHistory
     {
         $salaryHistory = $this->model->find($id);
-        return $this->salaryHistoryFactory->fromEloquent($salaryHistory);
+        return $salaryHistory ? $this->salaryHistoryFactory->fromEloquent($salaryHistory) : null;
     }
 
     public function storeSalaryHistory(SalaryHistory $salaryHitory): SalaryHistory

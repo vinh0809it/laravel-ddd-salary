@@ -12,7 +12,7 @@ interface ISalaryHistoryRepository extends IBaseRepository
 {
     public function existsForUserInYear(string $userId, int $year): bool;
     public function getSalaryHistories(SalaryHistoryFilterDTO $filterDTO, PageMetaDTO $pageMetaDTO): SalaryHistoryWithPageMetaDTO;
-    public function findSalaryHistoryById(string $id): SalaryHistory;
+    public function findSalaryHistoryById(string $id): ?SalaryHistory;
     public function storeSalaryHistory(SalaryHistory $salaryHistory): SalaryHistory;
     public function updateSalaryHistory(SalaryHistory $salaryHistory): void;
 }

@@ -1,0 +1,224 @@
+{
+	"info": {
+		"_postman_id": "2d81e342-d445-4ed3-87bb-67e20e7e178b",
+		"name": "salary",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "1776327"
+	},
+	"item": [
+		{
+			"name": "storeUser",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "Your name",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "your_email@gmail.com",
+							"type": "text"
+						},
+						{
+							"key": "is_admin",
+							"value": "true",
+							"type": "text"
+						},
+						{
+							"key": "is_active",
+							"value": "true",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "12345678",
+							"type": "text"
+						}
+					]
+				},
+				"url": "http://127.0.0.1:8000/api/v1/users"
+			},
+			"response": []
+		},
+		{
+			"name": "storeSalaryHistory",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "user_id",
+							"value": "28",
+							"type": "text"
+						},
+						{
+							"key": "on_date",
+							"value": "2025-10-06",
+							"type": "text"
+						},
+						{
+							"key": "salary",
+							"value": "5000000",
+							"type": "text"
+						},
+						{
+							"key": "currency",
+							"value": "VND",
+							"type": "text"
+						},
+						{
+							"key": "note",
+							"value": "Something noted",
+							"type": "text"
+						}
+					]
+				},
+				"url": "http://127.0.0.1:8000/api/v1/salary_histories"
+			},
+			"response": []
+		},
+		{
+			"name": "updateSalaryHistory",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"on_date\": \"2024-10-15\",\r\n    \"salary\": 20000000,\r\n    \"currency\": \"VND\",\r\n    \"note\": \"Noted\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://127.0.0.1:8000/api/v1/salary_histories/1"
+			},
+			"response": []
+		},
+		{
+			"name": "updateUser",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": " application/json",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Updated Name\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/v1/users/9999",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v1",
+						"users",
+						"9999"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getUsers",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": "http://127.0.0.1:8000/api/v1/users"
+			},
+			"response": []
+		},
+		{
+			"name": "getSalaryHistories",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    from_date: \"2024-01-01\",\r\n    to_date: \"2024-10-01\"\r\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/v1/salary_histories?from_date=2023-01-01&to_date=2025-01-01",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v1",
+						"salary_histories"
+					],
+					"query": [
+						{
+							"key": "from_date",
+							"value": "2023-01-01"
+						},
+						{
+							"key": "to_date",
+							"value": "2025-01-01"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteUser",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": "http://127.0.0.1:8000/api/v1/users/9999"
+			},
+			"response": []
+		}
+	]
+}

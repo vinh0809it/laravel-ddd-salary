@@ -101,11 +101,7 @@ class SalaryHistoryService
      */
     public function updateSalaryHistory(UpdateSalaryHistoryDTO $dto): void
     {
-        $salaryHistory = $this->salaryHistoryRepository->findSalaryHistoryById($dto->id);
-
-        if(!$salaryHistory) {
-            throw new EntityNotFoundException('The salary history is not existed.');
-        }
+        $salaryHistory = $this->getSalaryHistoryById($dto->id);
 
         $mappings = [
             'onDate' => 'setDate',
@@ -117,7 +113,7 @@ class SalaryHistoryService
         foreach ($mappings as $property => $method) {
             $value = $dto->$property;
 
-            if($value) {
+            if($value !== null) {
                 $salaryHistory->$method($value);
             }
         }
@@ -128,4 +124,20 @@ class SalaryHistoryService
             throw new DatabaseException('Failed to update salary history: ' . $e->getMessage());
         }
     }
+
+    public function getSalaryHistoryById(string $id): SalaryHistory
+    {
+        try {
+            $salaryHistory = $this->salaryHistoryRepository->findSalaryHistoryById($id);
+        } catch(Throwable $e) {
+            throw new DatabaseException('Failed to get the salary history: ' . $e->getMessage());
+        }
+
+        if(!$salaryHistory) {
+            throw new EntityNotFoundException('The salary history is not existed.');
+        }
+
+        return $salaryHistory;
+    }
+    
 }

@@ -10,7 +10,7 @@ interface IUserRepository extends IBaseRepository
 {
     public function getUsers(?string $email, ?string $name): Collection;
 
-    public function findUserById(string $id): User;
+    public function findUserById(string $id): ?User;
 
     public function emailExists(string $email): bool;
 

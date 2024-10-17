@@ -40,6 +40,8 @@ You can contact me via email at vinh0809it@gmail.com
 7. ```php artisan test```
 8. ```php artisan serve```
 
+9. Import the Postman JSON file located in the 'postman' folder to have the API collection
+
 ## 📁 Structure particularities
 
 I find this structure clearer, so I decided to stick with it.

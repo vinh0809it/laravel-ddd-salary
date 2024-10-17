@@ -4,20 +4,20 @@ namespace Src\SalaryHistory\Domain\Entities;
 use Src\SalaryHistory\Domain\ValueObjects\Currency;
 
 // Just a simple entity as an example how it works with aggregate root
-class SalaryAdjustment
+class Allowance
 {
     public function __construct(
         private string $id,
         private string $salaryHistoryId,
-        private string $adjustmentType,
+        private string $allowanceType,
         private float $amount,
         private Currency $currency,
     ) {}
 
     // --- Setters ---
-    public function setAdjustmentType(string $newAdjustmentType): void
+    public function setAdjustmentType(string $newAllowanceType): void
     {
-        $this->adjustmentType = $newAdjustmentType;
+        $this->allowanceType = $newAllowanceType;
     }
     
     public function setAmount(float $newAmount): void
@@ -36,9 +36,9 @@ class SalaryAdjustment
         return $this->id;
     }
 
-    public function getAdjustmentType(): string
+    public function getAllowanceType(): string
     {
-        return $this->adjustmentType;
+        return $this->allowanceType;
     }
 
     public function getAmount(): float
@@ -55,7 +55,7 @@ class SalaryAdjustment
     {
         return [
             'id' => $this->getId(),
-            'adjustment_type' => $this->getAdjustmentType(),
+            'allowance_type' => $this->getAllowanceType(),
             'amount' => $this->getAmount(),
             'currency' => $this->getCurrency()->getCurrencyCode(),
         ];

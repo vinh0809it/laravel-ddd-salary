@@ -9,7 +9,8 @@ use Src\Shared\Domain\Exceptions\ValueRequiredException;
 
 class SalaryHistory extends AggregateRoot
 {
-    private array $adjustments = [];
+    // Just mock first, I'll handle with allowances later
+    private array $allowances = [];
 
     public function __construct(
         private ?string $id,
@@ -24,21 +25,20 @@ class SalaryHistory extends AggregateRoot
         }
     }
 
-    // Just mock
     public function calcTotalSalary(): float
     {
         $totalSalary = $this->salary->getAmount();
 
-        foreach ($this->adjustments as $adjustment) {
-            $totalSalary += $adjustment->getAmount();   
+        foreach ($this->allowances as $allowance) {
+            $totalSalary += $allowance->getAmount();   
         }
 
         return $totalSalary;
     }
 
-    public function addAdjustment(SalaryAdjustment $adjustment): void
+    public function addAllowance(Allowance $allowance): void
     {
-        $this->adjustments[] = $adjustment;
+        $this->allowances[] = $allowance;
     }
 
     // --- Setters ---

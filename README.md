@@ -28,7 +28,11 @@ Howerver, I have made a few changes to the folder structure and incorporated add
 
 And lastly, I would really appreciate any advice on how to improve this project, even if it's about the smallest issues, coding conventions, or areas where I'm not following best practices. I want to learn and improve, so all feedback is valuable to me.
 
-You can contact me via email at vinh0809it@gmail.com
+If you find this repo useful, please give me a star or an encouraging comment, I would really appreciate it.
+
+You can contact me via 
+Email: vinh0809it@gmail.com
+Facebook: https://www.facebook.com/vinh0809it/
 
 ## 📗 Installation
 1. ```composer install```

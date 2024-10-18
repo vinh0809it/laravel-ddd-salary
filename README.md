@@ -31,7 +31,9 @@ And lastly, I would really appreciate any advice on how to improve this project,
 If you find this repo useful, please give me a star or an encouraging comment, I would really appreciate it.
 
 You can contact me via 
+
 Email: vinh0809it@gmail.com
+
 Facebook: https://www.facebook.com/vinh0809it/
 
 ## 📗 Installation

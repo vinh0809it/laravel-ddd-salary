@@ -3,6 +3,7 @@
 namespace Tests\Feature\User;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Response;
 use Src\User\Domain\ValueObjects\Email;
 use Src\User\Infrastructure\EloquentModels\UserEloquentModel;
@@ -10,11 +11,13 @@ use Tests\TestCase;
 
 class StoreUserTest extends TestCase
 {
+    use WithFaker;
     use RefreshDatabase;
 
     protected function setUp(): void
     {
         parent::setUp();
+        $this->setUpFaker();
     }
 
     /**
@@ -26,12 +29,15 @@ class StoreUserTest extends TestCase
         $user = UserEloquentModel::factory()->admin()->create();
         $this->actingAs($user);
      
+        $name = $this->faker->name();
+        $email = $this->faker->safeEmail();
+
         $request = [
-            'name' => 'Admin User',
-            'email' => 'vinh0809it@gmail.com',
-            'is_admin' => false,
-            'is_active' => true,
-            'password' => '12345678'
+            'name' => $name,
+            'email' => $email,
+            'is_admin' => $this->faker->boolean(),
+            'is_active' => $this->faker->boolean(),
+            'password' => $this->faker->password()
         ];
 
         // Act
@@ -41,8 +47,8 @@ class StoreUserTest extends TestCase
         $response->assertStatus(Response::HTTP_CREATED);
 
         $this->assertDatabaseHas('users', [
-            'name' => 'Admin User',
-            'email' => (string)new Email('vinh0809it@gmail.com'),
+            'name' => $name,
+            'email' => $email,
         ]);
 
         $response->assertJsonStructure([
@@ -62,11 +68,11 @@ class StoreUserTest extends TestCase
         $this->actingAs($user);
 
         $request = [
-            'name' => 'Admin User',
-            'email' => 'vinh0809it@gmail.com',
-            'is_admin' => false,
-            'is_active' => true,
-            'password' => '12345678'
+            'name' => $this->faker->name(),
+            'email' => $this->faker->safeEmail(),
+            'is_admin' => $this->faker->boolean(),
+            'is_active' => $this->faker->boolean(),
+            'password' => $this->faker->password()
         ];
 
         // Act
@@ -83,11 +89,8 @@ class StoreUserTest extends TestCase
         $this->actingAs($user);
 
         $request = [
-            'name' => 'Admin User',
+            'name' => $this->faker->name(),
             'email' => 'invalid_email',
-            'is_admin' => false,
-            'is_active' => true,
-            'password' => '12345678'
         ];
 
         // Act

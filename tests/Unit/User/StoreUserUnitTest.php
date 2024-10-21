@@ -84,8 +84,8 @@ class StoreUserUnitTest extends TestCase
 
         // Assertions
         $this->assertInstanceOf(User::class, $result);
-        $this->assertEquals($this->userDTO->name, (string)$result->name);
-        $this->assertEquals($this->userDTO->email, (string)$result->email);
+        $this->assertEquals($this->userDTO->name, $result->name->toString());
+        $this->assertEquals($this->userDTO->email, $result->email->toString());
         $this->assertTrue($result->isAdmin);
         $this->assertTrue($result->isAdmin);
     }

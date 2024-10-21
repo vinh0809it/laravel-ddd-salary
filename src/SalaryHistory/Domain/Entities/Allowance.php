@@ -2,9 +2,10 @@
 namespace Src\SalaryHistory\Domain\Entities;
 
 use Src\SalaryHistory\Domain\ValueObjects\Currency;
+use Src\Shared\Domain\Entity;
 
 // Just a simple entity as an example how it works with aggregate root
-class Allowance
+class Allowance extends Entity
 {
     public function __construct(
         private string $id,

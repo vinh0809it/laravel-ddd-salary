@@ -69,7 +69,7 @@ class GetUserUnitTest extends TestCase
 
         $this->assertInstanceOf(Collection::class, $result);
         $this->assertCount(1, $result);
-        $this->assertEquals($email, $result->first()->getEmail());
+        $this->assertEquals($email, $result->first()->getEmail()->toString());
     }
 
     public function test_GetUsers_throw_database_exception(): void

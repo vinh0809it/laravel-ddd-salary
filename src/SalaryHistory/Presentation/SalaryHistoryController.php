@@ -14,6 +14,7 @@ use Src\SalaryHistory\Presentation\Requests\StoreSalaryHistoryRequest;
 use Src\SalaryHistory\Application\UseCases\Commands\StoreSalaryHistoryCommand;
 use Src\SalaryHistory\Application\UseCases\Commands\UpdateSalaryHistoryCommand;
 use Src\SalaryHistory\Application\UseCases\Queries\GetSalaryHistoriesQuery;
+use Src\SalaryHistory\Infrastructure\Buses\CommandBus;
 use Src\SalaryHistory\Presentation\Requests\GetSalaryHistoryRequest;
 use Src\SalaryHistory\Presentation\Requests\UpdateSalaryHistoryRequest;
 use Src\User\Infrastructure\EloquentModels\UserEloquentModel;
@@ -24,7 +25,7 @@ class SalaryHistoryController extends BaseController
 {
     public function __construct(
         private IAuthorizationService $authorizationService,
-        private StoreSalaryHistoryCommand $storeSalaryHistoryCommand,
+        private CommandBus $commandBus,
         private UpdateSalaryHistoryCommand $updateSalaryHistoryCommand,
         private GetSalaryHistoriesQuery $getSalaryHistoriesQuery
     ) {
@@ -70,9 +71,10 @@ class SalaryHistoryController extends BaseController
     {
         try {
             $this->authorizationService->authorize('salary_history.store');
-            
+         
             $dto = StoreSalaryHistoryDTO::fromRequest($request);
-            $salaryHistory = $this->storeSalaryHistoryCommand->execute($dto);
+            $command = new StoreSalaryHistoryCommand($dto);
+            $salaryHistory = $this->commandBus->dispatch($command);
             
             $response = StoreSalaryHistoryDTO::toResponse($salaryHistory);
 

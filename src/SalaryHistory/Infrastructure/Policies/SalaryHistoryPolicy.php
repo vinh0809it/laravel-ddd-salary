@@ -1,8 +1,8 @@
 <?php
 
-namespace Src\User\Domain\Policies;
+namespace Src\SalaryHistory\Infrastructure\Policies;
 
-class UserPolicy
+class SalaryHistoryPolicy
 {
     public static function get(): bool
     {

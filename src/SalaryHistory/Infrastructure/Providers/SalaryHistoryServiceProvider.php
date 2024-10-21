@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Src\SalaryHistory\Application\Listeners\CreateSalaryHistoryForUser;
-use Src\SalaryHistory\Domain\Policies\SalaryHistoryPolicy;
+use Src\SalaryHistory\Infrastructure\Policies\SalaryHistoryPolicy;
 use Src\SalaryHistory\Domain\Repositories\ISalaryHistoryRepository;
 use Src\SalaryHistory\Infrastructure\Repositories\SalaryHistoryRepository;
 use Src\SalaryHistory\Domain\Rules\UserExistsRule;

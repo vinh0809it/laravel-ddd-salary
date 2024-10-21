@@ -2,7 +2,7 @@
 
 namespace Src\Shared\Domain\Services;
 
-interface AuthorizationServiceInterface
+interface IAuthorizationService
 {
     public function authorize(string $ability): bool;
 }

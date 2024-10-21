@@ -6,7 +6,7 @@ use Src\Shared\Application\DTOs\PageMetaDTO;
 use Src\Shared\Infrastructure\BaseRepository;
 use Src\SalaryHistory\Application\DTOs\SalaryHistoryFilterDTO;
 use Src\SalaryHistory\Application\DTOs\SalaryHistoryWithPageMetaDTO;
-use Src\SalaryHistory\Domain\Factories\SalaryHistoryFactory;
+use Src\SalaryHistory\Application\Mappers\SalaryHistoryMapper;
 use Src\SalaryHistory\Domain\Repositories\ISalaryHistoryRepository;
 use Src\SalaryHistory\Domain\Entities\SalaryHistory;
 use Src\SalaryHistory\Infrastructure\EloquentModels\SalaryHistoryEloquentModel;
@@ -19,7 +19,7 @@ class SalaryHistoryRepository extends BaseRepository implements ISalaryHistoryRe
         return SalaryHistoryEloquentModel::class;
     }
 
-    public function __construct(private SalaryHistoryFactory $salaryHistoryFactory) 
+    public function __construct() 
     {
         parent::__construct();
     }
@@ -56,7 +56,7 @@ class SalaryHistoryRepository extends BaseRepository implements ISalaryHistoryRe
         $result = $query->paginate($pageMetaDTO->pageSize, ['*'], 'page', $pageMetaDTO->page);
 
         $transformedResults = $result->map(function ($eloquent) {
-            return $this->salaryHistoryFactory->fromEloquent($eloquent);
+            return SalaryHistoryMapper::fromEloquent($eloquent);
         });
 
         return SalaryHistoryWithPageMetaDTO::fromPaginatedEloquent(
@@ -69,13 +69,13 @@ class SalaryHistoryRepository extends BaseRepository implements ISalaryHistoryRe
     public function findSalaryHistoryById(string $id): ?SalaryHistory
     {
         $salaryHistory = $this->model->find($id);
-        return $salaryHistory ? $this->salaryHistoryFactory->fromEloquent($salaryHistory) : null;
+        return $salaryHistory ? SalaryHistoryMapper::fromEloquent($salaryHistory) : null;
     }
 
     public function storeSalaryHistory(SalaryHistory $salaryHitory): SalaryHistory
     {
         $salaryHistoryEloquent = $this->model->create($salaryHitory->toArray());
-        return $this->salaryHistoryFactory->fromEloquent($salaryHistoryEloquent);
+        return SalaryHistoryMapper::fromEloquent($salaryHistoryEloquent);
     }
 
     public function updateSalaryHistory(SalaryHistory $salaryHistory): void

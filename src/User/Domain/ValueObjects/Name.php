@@ -2,8 +2,9 @@
 namespace Src\User\Domain\ValueObjects;
 
 use Src\Shared\Domain\Exceptions\ValueRequiredException;
+use Src\Shared\Domain\ValueObject;
 
-final class Name
+final class Name extends ValueObject
 {
     private string $name;
 
@@ -16,7 +17,7 @@ final class Name
         $this->name = $name;
     }
 
-    public function __toString(): string
+    public function toString(): string
     {
         return $this->name;
     }

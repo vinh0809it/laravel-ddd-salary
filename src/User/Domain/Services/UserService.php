@@ -70,7 +70,7 @@ class UserService
         if($userDTO->name) {
             $existingUser->changeName(new Name($userDTO->name));
         }
-
+       
         try {
             $this->userRepository->updateUser($existingUser);
             

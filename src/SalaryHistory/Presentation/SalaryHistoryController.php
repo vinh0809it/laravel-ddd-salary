@@ -6,7 +6,7 @@ use Src\Shared\Presentation\BaseController;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Src\Shared\Application\DTOs\PageMetaDTO;
-use Src\Shared\Domain\Services\AuthorizationServiceInterface;
+use Src\Shared\Domain\Services\IAuthorizationService;
 use Src\SalaryHistory\Application\DTOs\StoreSalaryHistoryDTO;
 use Src\SalaryHistory\Application\DTOs\SalaryHistoryFilterDTO;
 use Src\SalaryHistory\Application\DTOs\UpdateSalaryHistoryDTO;
@@ -23,7 +23,7 @@ use Throwable;
 class SalaryHistoryController extends BaseController
 {
     public function __construct(
-        private AuthorizationServiceInterface $authorizationService,
+        private IAuthorizationService $authorizationService,
         private StoreSalaryHistoryCommand $storeSalaryHistoryCommand,
         private UpdateSalaryHistoryCommand $updateSalaryHistoryCommand,
         private GetSalaryHistoriesQuery $getSalaryHistoriesQuery

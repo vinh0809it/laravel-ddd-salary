@@ -3,8 +3,9 @@ namespace Src\SalaryHistory\Domain\ValueObjects;
 
 use Src\SalaryHistory\Domain\Exceptions\InvalidSalaryException;
 use Src\Shared\Domain\Exceptions\ValueRequiredException;
+use Src\Shared\Domain\ValueObject;
 
-final class Salary
+final class Salary extends ValueObject
 {
     private float $amount;
 
@@ -35,11 +36,6 @@ final class Salary
         return $this->amount;
     }
 
-    public function toString(): string
-    {
-        return number_format($this->amount, 2); 
-    }
-
     public function add(Salary $other): Salary
     {
         return new self($this->amount + $other->getAmount());
@@ -51,8 +47,8 @@ final class Salary
         return new self($result); 
     }
 
-    public function isEqual(Salary $other): bool
+    public function toString(): string
     {
-        return $this->amount === $other->getAmount();
+        return number_format($this->amount, 2); 
     }
 }

@@ -74,9 +74,9 @@ class User extends AggregateRoot
     {
         return [
             'id' => $this->getId(),
-            'name' => (string)$this->getName(),
-            'email' => (string)$this->getEmail(),
-            'password' => (string)$this->getPassword(),
+            'name' => $this->getName()->toString(),
+            'email' => (string)$this->getEmail()->toString(),
+            'password' => (string)$this->getPassword()->toString(),
             'is_admin' => $this->isAdmin,
             'is_active' => $this->isActive,
         ];

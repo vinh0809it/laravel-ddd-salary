@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Src\User\Application\UseCases\Commands\StoreUserCommand;
 use Src\User\Application\UseCases\Commands\UpdateUserCommand;
-use Src\Shared\Domain\Services\AuthorizationServiceInterface;
+use Src\Shared\Domain\Services\IAuthorizationService;
 use Src\Shared\Presentation\BaseController;
 use Src\User\Application\DTOs\UserDTO;
 use Src\User\Application\UseCases\Commands\DeleteUserCommand;
@@ -19,7 +19,7 @@ use Throwable;
 
 class UserController extends BaseController
 {
-    public function __construct( private AuthorizationServiceInterface $authorizationService) {
+    public function __construct( private IAuthorizationService $authorizationService) {
         
         // Pls ignore this auth, I'm not going to implement authentication for this app
         // Just mock it to let the authorizationService work.

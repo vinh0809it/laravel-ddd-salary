@@ -57,8 +57,8 @@ class UserDTO
         foreach($entities as $entity) {
             $result[] = [
                 'id' => $entity->id,
-                'name' => (string)$entity->name,
-                'email' => (string)$entity->email,
+                'name' => $entity->name->toString(),
+                'email' => $entity->email->toString(),
                 'is_admin' => $entity->isAdmin
             ];
         };

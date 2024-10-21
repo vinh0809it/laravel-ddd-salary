@@ -2,9 +2,10 @@
 
 namespace Src\User\Domain\ValueObjects;
 
+use Src\Shared\Domain\ValueObject;
 use Src\User\Domain\Exceptions\PasswordTooShortException;
 
-final class Password
+final class Password extends ValueObject
 {
     public function __construct(private ?string $password = null)
     {
@@ -27,7 +28,7 @@ final class Password
         return $this->password;
     }
 
-    public function __toString()
+    public function toString()
     {
         return $this->password ?? '';
     }

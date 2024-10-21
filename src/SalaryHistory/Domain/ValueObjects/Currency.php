@@ -2,8 +2,9 @@
 namespace Src\SalaryHistory\Domain\ValueObjects;
 
 use Src\SalaryHistory\Domain\Exceptions\UnsupportedCurrencyException;
+use Src\Shared\Domain\ValueObject;
 
-final class Currency
+final class Currency extends ValueObject
 {
     private string $currencyCode;
     private const SUPPORTED_CURRENCIES = ['USD', 'VND', 'JPY'];
@@ -30,10 +31,5 @@ final class Currency
     public function toString(): string
     {
         return $this->currencyCode;
-    }
-
-    public function equals(Currency $other): bool
-    {
-        return $this->currencyCode === $other->getCurrencyCode();
     }
 }

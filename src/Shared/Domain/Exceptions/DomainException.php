@@ -3,11 +3,10 @@
 namespace Src\Shared\Domain\Exceptions;
 
 use Exception;
-use Illuminate\Http\Response;
 
 class DomainException extends Exception
 {
-    protected $httpCode = Response::HTTP_SERVICE_UNAVAILABLE;
+    protected $httpCode = 503;
 
     public function __construct(string $message = 'Domain Related Issue.')
     {

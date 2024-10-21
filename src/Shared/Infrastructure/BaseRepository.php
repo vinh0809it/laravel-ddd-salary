@@ -4,7 +4,6 @@ namespace Src\Shared\Infrastructure;
 
 use Src\Shared\Domain\IBaseRepository;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Pagination\LengthAwarePaginator;
 
 abstract class BaseRepository implements IBaseRepository
 {
@@ -85,7 +84,7 @@ abstract class BaseRepository implements IBaseRepository
         return $this->model->create($param);
     }
 
-    public function getPagination(LengthAwarePaginator $result): array
+    public function getPagination(mixed $result): array
     {
         return  [
             'current_page' => $result->currentPage(),

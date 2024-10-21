@@ -1,6 +1,6 @@
 <?php
 
-namespace Src\SalaryHistory\Application\Providers;
+namespace Src\SalaryHistory\Infrastructure\Providers;
 
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;

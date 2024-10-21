@@ -174,13 +174,13 @@ return [
          */
         
         //  Shared
-        \Src\Shared\Application\Providers\AuthorizationServiceProvider::class,
+        \Src\Shared\Infrastructure\Providers\AuthorizationServiceProvider::class,
 
         // User
-        \Src\User\Application\Providers\UserServiceProvider::class,
+        \Src\User\Infrastructure\Providers\UserServiceProvider::class,
 
         // SalaryHistory
-        \Src\SalaryHistory\Application\Providers\SalaryHistoryServiceProvider::class,
+        \Src\SalaryHistory\Infrastructure\Providers\SalaryHistoryServiceProvider::class,
 
     ])->toArray(),
 

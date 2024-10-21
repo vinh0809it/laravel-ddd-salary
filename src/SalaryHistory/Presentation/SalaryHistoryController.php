@@ -70,14 +70,14 @@ class SalaryHistoryController extends BaseController
     {
         try {
             $this->authorizationService->authorize('salary_history.store');
-           
+            
             $dto = StoreSalaryHistoryDTO::fromRequest($request);
             $salaryHistory = $this->storeSalaryHistoryCommand->execute($dto);
             
             $response = StoreSalaryHistoryDTO::toResponse($salaryHistory);
 
             return $this->sendResponse(
-                result: $response, 
+                result: $response,
                 message: '', 
                 httpCode: Response::HTTP_CREATED, 
             );

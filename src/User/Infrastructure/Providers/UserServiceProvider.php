@@ -1,6 +1,6 @@
 <?php
 
-namespace Src\User\Application\Providers;
+namespace Src\User\Infrastructure\Providers;
 
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;

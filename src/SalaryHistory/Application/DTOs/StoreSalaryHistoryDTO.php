@@ -8,7 +8,7 @@ use Illuminate\Support\Collection;
 final class StoreSalaryHistoryDTO
 {
     public function __construct(
-        public ?string $id, 
+        public ?string $id = null, 
         public string $userId, 
         public string $onDate, 
         public float $salary, 

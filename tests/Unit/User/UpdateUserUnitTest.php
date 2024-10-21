@@ -13,9 +13,13 @@ use Src\User\Domain\ValueObjects\Email;
 use Src\User\Domain\ValueObjects\Name;
 use Src\User\Domain\Repositories\IUserRepository;
 use Src\User\Domain\Services\UserService;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Str;
 
 class UpdateUserUnitTest extends TestCase
 {
+    use WithFaker;
+
     protected $dto;
     protected $userFactory;
     protected $userRepository;
@@ -29,15 +33,16 @@ class UpdateUserUnitTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        $this->setUpFaker();
 
         $this->userFactory = Mockery::mock(UserFactory::class);
         $this->userRepository = Mockery::mock(IUserRepository::class);
 
         $this->dto = new UserDTO(
-            id: 1, 
-            name: 'Vinh Vo',
-            email: 'vinh0809it@gmail.com',
-            password: '12345678',
+            id: $this->faker->uuid(), 
+            name: $this->faker->name(),
+            email: $this->faker->unique()->safeEmail(),
+            password: Str::random(8),
             isAdmin: true,
             isActive: true
         );

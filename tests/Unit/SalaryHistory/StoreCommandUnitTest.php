@@ -17,7 +17,7 @@ class StoreCommandUnitTest extends TestCase
 {
     private $service;
     private $userDomainService;
-    private $storeCommand;
+    private $dto;
 
     protected function setUp(): void
     {
@@ -25,6 +25,14 @@ class StoreCommandUnitTest extends TestCase
         $this->service = Mockery::mock(SalaryHistoryService::class);
         $this->userDomainService = Mockery::mock(IUserDomainService::class);
 
+        $this->dto = new StoreSalaryHistoryDTO(
+            id: null,
+            userId: 1,
+            onDate: '2024-10-06',
+            salary: 5000000,
+            currency: 'VND',
+            note: 'Testing'
+        );
     }
     
     protected function tearDown(): void
@@ -36,33 +44,24 @@ class StoreCommandUnitTest extends TestCase
     public function test_storeCommand_execute_successful(): void
     {
         // Arrange
-        $dto = new StoreSalaryHistoryDTO(
-            id: null,
-            userId: 1,
-            onDate: '2024-10-06',
-            salary: 5000000,
-            currency: 'VND',
-            note: 'Testing'
-        );
-
         $salaryHistory = Mockery::Mock(SalaryHistory::class);
 
         $this->userDomainService->shouldReceive('userExists')
-            ->with($dto->userId)
+            ->with($this->dto->userId)
             ->andReturn(true);
 
         $this->service->shouldReceive('canStoreSalaryHistory')
-            ->with($dto->userId, Carbon::parse($dto->onDate)->format('Y'))
+            ->with($this->dto->userId, Carbon::parse($this->dto->onDate)->format('Y'))
             ->andReturn(true);
 
         $this->service->shouldReceive('storeSalaryHistory')
-            ->with($dto)
+            ->with($this->dto)
             ->andReturn($salaryHistory);
 
         $storeCommand = new StoreSalaryHistoryCommand($this->service, $this->userDomainService);
 
         // Act
-        $result = $storeCommand->execute($dto);
+        $result = $storeCommand->execute($this->dto);
 
         // Assert
         $this->assertSame($salaryHistory, $result);
@@ -71,17 +70,8 @@ class StoreCommandUnitTest extends TestCase
     public function test_storeCommand_user_not_exists(): void
     {
         // Arrange
-        $dto = new StoreSalaryHistoryDTO(
-            id: null,
-            userId: 1,
-            onDate: '2024-10-06',
-            salary: 5000000,
-            currency: 'VND',
-            note: 'Testing'
-        );
-
         $this->userDomainService->shouldReceive('userExists')
-            ->with($dto->userId)
+            ->with($this->dto->userId)
             ->andReturn(false);
 
         // Assertion
@@ -89,27 +79,18 @@ class StoreCommandUnitTest extends TestCase
 
         // Act
         $storeCommand = new StoreSalaryHistoryCommand($this->service, $this->userDomainService);
-        $storeCommand->execute($dto);
+        $storeCommand->execute($this->dto);
     }
 
     public function test_storeCommand_can_not_store_salary_history(): void
     {
         // Arrange
-        $dto = new StoreSalaryHistoryDTO(
-            id: null,
-            userId: 1,
-            onDate: '2024-10-06',
-            salary: 5000000,
-            currency: 'VND',
-            note: 'Testing'
-        );
-
         $this->userDomainService->shouldReceive('userExists')
-            ->with($dto->userId)
+            ->with($this->dto->userId)
             ->andReturn(true);
 
         $this->service->shouldReceive('canStoreSalaryHistory')
-            ->with($dto->userId, Carbon::parse($dto->onDate)->format('Y'))
+            ->with($this->dto->userId, Carbon::parse($this->dto->onDate)->format('Y'))
             ->andReturn(false);
 
         // Assertion
@@ -117,6 +98,6 @@ class StoreCommandUnitTest extends TestCase
 
         // Act
         $storeCommand = new StoreSalaryHistoryCommand($this->service, $this->userDomainService);
-        $storeCommand->execute($dto);
+        $storeCommand->execute($this->dto);
     }
 }

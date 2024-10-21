@@ -11,14 +11,14 @@ use Src\SalaryHistory\Application\DTOs\StoreSalaryHistoryDTO;
 use Src\SalaryHistory\Application\DTOs\SalaryHistoryFilterDTO;
 use Src\SalaryHistory\Application\DTOs\SalaryHistoryWithPageMetaDTO;
 use Src\SalaryHistory\Application\DTOs\UpdateSalaryHistoryDTO;
-use Src\SalaryHistory\Domain\Factories\SalaryHistoryFactory;
+use Src\SalaryHistory\Application\Mappers\SalaryHistoryMapper;
 use Src\SalaryHistory\Domain\Entities\SalaryHistory;
+use Src\SalaryHistory\Domain\Factories\SalaryHistoryFactory;
 use Src\SalaryHistory\Domain\Repositories\ISalaryHistoryRepository;
 
 class SalaryHistoryService
 {
     public function __construct(
-        private SalaryHistoryFactory $salaryHistoryFactory,
         private ISalaryHistoryRepository $salaryHistoryRepository,
     ) {}
 
@@ -62,7 +62,7 @@ class SalaryHistoryService
         $currency = 'VND';
         $note = 'Initial salary';
 
-        $salaryHistory = $this->salaryHistoryFactory->create(
+        $salaryHistory = SalaryHistoryFactory::create(
             null,
             $userId,
             $toDay,
@@ -85,7 +85,7 @@ class SalaryHistoryService
      */
     public function storeSalaryHistory(StoreSalaryHistoryDTO $dto): SalaryHistory
     {
-        $salaryHistory = $this->salaryHistoryFactory->fromDTO($dto);
+        $salaryHistory = SalaryHistoryMapper::fromDTO($dto);
 
         try {
             return $this->salaryHistoryRepository->storeSalaryHistory($salaryHistory);

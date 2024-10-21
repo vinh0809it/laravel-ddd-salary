@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\SalaryHistory;
 
+use Illuminate\Foundation\Testing\WithFaker;
 use Mockery;
 use PHPUnit\Framework\TestCase;
 use Src\Shared\Domain\Exceptions\DatabaseException;
@@ -17,6 +18,8 @@ use Src\SalaryHistory\Domain\ValueObjects\Currency;
 
 class UpdateSalaryHistoryUnitTest extends TestCase
 {
+    use WithFaker;
+
     protected $salaryHistoryFactory;
     protected $salaryHistoryRepository;
     protected $userDomainService;
@@ -31,17 +34,18 @@ class UpdateSalaryHistoryUnitTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        $this->setUpFaker();
 
         $this->salaryHistoryFactory = Mockery::mock(SalaryHistoryFactory::class);
         $this->salaryHistoryRepository = Mockery::mock(ISalaryHistoryRepository::class);
         $this->userDomainService = Mockery::mock(IUserDomainService::class);
 
         $this->dto = UpdateSalaryHistoryDTO::create(
-            id: 1, 
-            onDate: Date::fromString('2024-10-11'),
-            salary: Salary::fromValue(10000000),
-            currency: Currency::fromString('VND'),
-            note: null
+            id: $this->faker->uuid(), 
+            onDate: Date::fromString($this->faker->date()),
+            salary: Salary::fromValue($this->faker->randomFloat(2, 0, 10000000)),
+            currency: Currency::fromString($this->faker->randomElement(['USD', 'VND', 'JPY'])),
+            note: $this->faker->sentence()
         );
     }
 
@@ -67,14 +71,16 @@ class UpdateSalaryHistoryUnitTest extends TestCase
             ->once()
             ->with(Mockery::type(Currency::class));
 
+        $salaryHistory->shouldReceive('setNote')
+            ->once()
+            ->with(Mockery::type('string'));
+
         $this->salaryHistoryRepository->shouldReceive('updateSalaryHistory')
             ->once()
             ->with($salaryHistory);
 
         $salaryHistoryService = new SalaryHistoryService(
-            $this->salaryHistoryFactory, 
-            $this->salaryHistoryRepository,
-            $this->userDomainService
+            $this->salaryHistoryRepository
         );
 
         // Act
@@ -93,9 +99,7 @@ class UpdateSalaryHistoryUnitTest extends TestCase
             ->andThrow(new DatabaseException('Database error'));
 
         $salaryHistoryService = new SalaryHistoryService(
-            $this->salaryHistoryFactory, 
-            $this->salaryHistoryRepository,
-            $this->userDomainService
+            $this->salaryHistoryRepository
         );
 
         // Assert

@@ -3,6 +3,7 @@
 namespace Tests\Unit\SalaryHistory;
 
 use Carbon\Carbon;
+use Illuminate\Foundation\Testing\WithFaker;
 use Mockery;
 use PHPUnit\Framework\TestCase;
 use Src\SalaryHistory\Application\DTOs\StoreSalaryHistoryDTO;
@@ -15,6 +16,8 @@ use Src\Shared\Domain\Exceptions\EntityNotFoundException;
 
 class StoreCommandUnitTest extends TestCase
 {
+    use WithFaker;
+
     private $service;
     private $userDomainService;
     private $dto;
@@ -22,16 +25,18 @@ class StoreCommandUnitTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        $this->setUpFaker();
+        
         $this->service = Mockery::mock(SalaryHistoryService::class);
         $this->userDomainService = Mockery::mock(IUserDomainService::class);
 
         $this->dto = new StoreSalaryHistoryDTO(
             id: null,
-            userId: 1,
-            onDate: '2024-10-06',
-            salary: 5000000,
-            currency: 'VND',
-            note: 'Testing'
+            userId: $this->faker->uuid(),
+            onDate: $this->faker->date(),
+            salary: $this->faker->randomFloat(2, 0, 10000000),
+            currency: $this->faker->randomElement(['USD', 'VND', 'JPY']),
+            note: $this->faker->sentence()
         );
     }
     

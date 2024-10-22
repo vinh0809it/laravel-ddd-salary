@@ -33,6 +33,7 @@ class SalaryHistoryController extends BaseController
         // Pls ignore this auth, I'm not going to implement authentication for this app
         // Just mock it to let the authorizationService work.
         $user = UserEloquentModel::where('is_admin', true)->first();
+        
         if($user) {
             Auth::login($user);
         }
@@ -71,13 +72,14 @@ class SalaryHistoryController extends BaseController
     {
         try {
             $this->authorizationService->authorize('salary_history.store');
-         
+           
             $dto = StoreSalaryHistoryDTO::fromRequest($request);
+            
             $command = new StoreSalaryHistoryCommand($dto);
             $salaryHistory = $this->commandBus->dispatch($command);
-            
+          
             $response = StoreSalaryHistoryDTO::toResponse($salaryHistory);
-
+            
             return $this->sendResponse(
                 result: $response,
                 message: '', 
@@ -99,6 +101,7 @@ class SalaryHistoryController extends BaseController
     {
         try {
             $this->authorizationService->authorize('salary_history.update');
+
             $dto = UpdateSalaryHistoryDTO::fromRequest($request, $id);
             $this->updateSalaryHistoryCommand->execute($dto);
 

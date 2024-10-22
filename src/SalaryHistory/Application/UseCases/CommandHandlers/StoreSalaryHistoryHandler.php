@@ -21,17 +21,15 @@ class StoreSalaryHistoryHandler
     public function handle(StoreSalaryHistoryCommand $command): SalaryHistory
     {
         $dto = $command->dto;
-
+       
         if(!$this->userDomainService->userExists($dto->userId)) {
             throw new EntityNotFoundException('The user is not existed.');
         }
-
-        $currentYear = Carbon::parse($dto->onDate)->format('Y');
-
-        if (!$this->salaryHistoryService->canStoreSalaryHistory($dto->userId, $currentYear)) {
+       
+        if (!$this->salaryHistoryService->canStoreSalaryHistory($dto->userId, $dto->onDate)) {
             throw new UserHasSalaryRecordInYearException();
         }
-
+       
         return $this->salaryHistoryService->storeSalaryHistory($dto);
     }
 }

@@ -46,9 +46,9 @@ class SalaryHistoryMapper
             return new SalaryHistory(
                 id: $dto->id,
                 userId: $dto->userId,
-                onDate: Date::fromString($dto->onDate),
-                salary: Salary::fromValue($dto->salary),
-                currency: Currency::fromString($dto->currency),
+                onDate: $dto->onDate,
+                salary: $dto->salary,
+                currency: $dto->currency,
                 note: $dto->note
             );
 

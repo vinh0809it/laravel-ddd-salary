@@ -9,7 +9,10 @@ use Src\SalaryHistory\Application\DTOs\StoreSalaryHistoryDTO;
 use Src\SalaryHistory\Domain\Entities\SalaryHistory;
 use Src\SalaryHistory\Domain\Repositories\ISalaryHistoryRepository;
 use Src\SalaryHistory\Domain\Services\SalaryHistoryService;
+use Src\SalaryHistory\Domain\ValueObjects\Currency;
+use Src\SalaryHistory\Domain\ValueObjects\Salary;
 use Src\Shared\Domain\Exceptions\DatabaseException;
+use Src\Shared\Domain\ValueObjects\Date;
 
 class StoreServiceUnitTest extends TestCase
 {
@@ -33,9 +36,9 @@ class StoreServiceUnitTest extends TestCase
         $this->dto = new StoreSalaryHistoryDTO(
             id: null,
             userId: $this->faker->uuid(),
-            onDate: $this->faker->date(),
-            salary: $this->faker->randomFloat(2, 0, 10000000),
-            currency: $this->faker->randomElement(['USD', 'VND', 'JPY']),
+            onDate: Date::fromString($this->faker->date()),
+            salary: Salary::fromValue($this->faker->randomFloat(2, 0, 10000000)),
+            currency: Currency::fromString($this->faker->randomElement(['USD', 'VND', 'JPY'])),
             note: $this->faker->sentence()
         );
     }

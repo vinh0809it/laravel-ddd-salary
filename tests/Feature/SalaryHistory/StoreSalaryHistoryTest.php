@@ -5,6 +5,7 @@ namespace Tests\Feature\SalaryHistory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log;
 use Src\User\Infrastructure\EloquentModels\UserEloquentModel;
 use Tests\TestCase;
 
@@ -31,7 +32,7 @@ class StoreSalaryHistoryTest extends TestCase
         $request = [
             'user_id' => (string)$user->id,
             'on_date' => $this->faker->date(),
-            'salary' => $this->faker->randomFloat(0, 10000000),
+            'salary' => $this->faker->randomFloat(1, 0, 10000000),
             'currency' => $this->faker->randomElement(['USD', 'VND', 'JPY']),
             'note' => $this->faker->sentence()
         ];
@@ -64,7 +65,7 @@ class StoreSalaryHistoryTest extends TestCase
         $request = [
             'user_id' => (string)$user->id,
             'on_date' => $this->faker->date(),
-            'salary' => $this->faker->randomFloat(0, 10000000),
+            'salary' => $this->faker->randomFloat(1, 0, 10000000),
             'currency' => $this->faker->randomElement(['USD', 'VND', 'JPY']),
             'note' => $this->faker->sentence()
         ];

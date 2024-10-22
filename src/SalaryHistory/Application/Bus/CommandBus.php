@@ -10,11 +10,21 @@ class CommandBus implements ICommandBus
 {
     protected $handlers = [];
 
+    /**
+     * @param string $commandClass
+     * @param ICommandHandler $handler
+     * 
+     * @return void
+     */
     public function register(string $commandClass, ICommandHandler $handler): void
     {
         $this->handlers[$commandClass] = $handler;
     }
 
+    /**
+     * @param ICommand $command
+     * 
+     */
     public function dispatch(ICommand $command)
     {
         $commandClass = get_class($command);

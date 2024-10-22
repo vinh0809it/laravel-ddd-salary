@@ -24,6 +24,12 @@ class SalaryHistoryRepository extends BaseRepository implements ISalaryHistoryRe
         parent::__construct();
     }
 
+    /**
+     * @param string $userId
+     * @param int $year
+     * 
+     * @return bool
+     */
     public function existsForUserInYear(string $userId, int $year): bool
     {
         return $this->model
@@ -32,6 +38,12 @@ class SalaryHistoryRepository extends BaseRepository implements ISalaryHistoryRe
             ->exists();
     }
 
+    /**
+     * @param SalaryHistoryFilterDTO $filterDTO
+     * @param PageMetaDTO $pageMetaDTO
+     * 
+     * @return SalaryHistoryWithPageMetaDTO
+     */
     public function getSalaryHistories(SalaryHistoryFilterDTO $filterDTO, PageMetaDTO $pageMetaDTO): SalaryHistoryWithPageMetaDTO
     {
         $query = $this->model->select(
@@ -66,20 +78,38 @@ class SalaryHistoryRepository extends BaseRepository implements ISalaryHistoryRe
         );
     }
     
+    /**
+     * @param string $id
+     * 
+     * @return SalaryHistory|null
+     */
     public function findSalaryHistoryById(string $id): ?SalaryHistory
     {
         $salaryHistory = $this->model->find($id);
         return $salaryHistory ? SalaryHistoryMapper::fromEloquent($salaryHistory) : null;
     }
 
-    public function storeSalaryHistory(SalaryHistory $salaryHitory): SalaryHistory
+    /**
+     * @param SalaryHistory $salaryHistory
+     * 
+     * @return SalaryHistory
+     */
+    public function storeSalaryHistory(SalaryHistory $salaryHistory): SalaryHistory
     {
-        $salaryHistoryEloquent = $this->model->create($salaryHitory->toArray());
+        $params = SalaryHistoryMapper::toArray($salaryHistory);
+        $salaryHistoryEloquent = $this->model->create($params);
+
         return SalaryHistoryMapper::fromEloquent($salaryHistoryEloquent);
     }
 
+    /**
+     * @param SalaryHistory $salaryHistory
+     * 
+     * @return void
+     */
     public function updateSalaryHistory(SalaryHistory $salaryHistory): void
     {
-        $this->model->find($salaryHistory->getId())->update($salaryHistory->toArray());
+        $params = SalaryHistoryMapper::toArray($salaryHistory);
+        $this->model->find($salaryHistory->getId())->update($params);
     }
 }

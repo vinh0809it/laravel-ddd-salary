@@ -76,13 +76,10 @@ class SalaryHistoryController extends BaseController
             $dto = StoreSalaryHistoryDTO::fromRequest($request);
             
             $command = new StoreSalaryHistoryCommand($dto);
-            $salaryHistory = $this->commandBus->dispatch($command);
+            $response = $this->commandBus->dispatch($command);
           
-            $response = StoreSalaryHistoryDTO::toResponse($salaryHistory);
-            
             return $this->sendResponse(
                 result: $response,
-                message: '', 
                 httpCode: Response::HTTP_CREATED, 
             );
         } catch (Throwable $e) {
@@ -109,7 +106,6 @@ class SalaryHistoryController extends BaseController
 
             return $this->sendResponse(
                 result: null, 
-                message: '', 
                 httpCode: Response::HTTP_CREATED, 
             );
         } catch (Throwable $e) {

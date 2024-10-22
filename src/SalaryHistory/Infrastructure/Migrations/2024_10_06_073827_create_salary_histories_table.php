@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('user_id')->index();
             $table->date('on_date')->index();
-            $table->float('salary')->default(0);
+            $table->unsignedFloat('salary', 20, 2)->default(0);
             $table->string('note')->nullable();
             $table->timestamps();
         });

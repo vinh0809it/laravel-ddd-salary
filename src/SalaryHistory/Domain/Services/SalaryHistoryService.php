@@ -15,6 +15,7 @@ use Src\SalaryHistory\Application\Mappers\SalaryHistoryMapper;
 use Src\SalaryHistory\Domain\Entities\SalaryHistory;
 use Src\SalaryHistory\Domain\Factories\SalaryHistoryFactory;
 use Src\SalaryHistory\Domain\Repositories\ISalaryHistoryRepository;
+use Src\Shared\Domain\ValueObjects\Date;
 
 class SalaryHistoryService
 {
@@ -43,9 +44,9 @@ class SalaryHistoryService
      * 
      * @return bool
      */
-    public function canStoreSalaryHistory(string $userId, int $year): bool
+    public function canStoreSalaryHistory(string $userId, Date $onDate): bool
     {
-        return !$this->salaryHistoryRepository->existsForUserInYear($userId, $year);
+        return !$this->salaryHistoryRepository->existsForUserInYear($userId, $onDate->format('Y'));
     }
 
     /**
@@ -84,9 +85,9 @@ class SalaryHistoryService
      * @return SalaryHistory
      */
     public function storeSalaryHistory(StoreSalaryHistoryDTO $dto): SalaryHistory
-    {
+    {  
         $salaryHistory = SalaryHistoryMapper::fromDTO($dto);
-
+       
         try {
             return $this->salaryHistoryRepository->storeSalaryHistory($salaryHistory);
         } catch (Throwable $e) {

@@ -4,16 +4,19 @@ namespace Src\SalaryHistory\Application\DTOs;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Src\SalaryHistory\Domain\ValueObjects\Currency;
+use Src\SalaryHistory\Domain\ValueObjects\Salary;
+use Src\Shared\Domain\ValueObjects\Date;
 
 final class StoreSalaryHistoryDTO
 {
     public function __construct(
-        public ?string $id = null, 
         public string $userId, 
-        public string $onDate, 
-        public float $salary, 
-        public string $currency, 
-        public ?string $note
+        public Date $onDate, 
+        public Salary $salary, 
+        public Currency $currency, 
+        public ?string $id = null, 
+        public ?string $note = null
     ){}
 
     /**
@@ -31,9 +34,9 @@ final class StoreSalaryHistoryDTO
         return new self(
             id: $id, 
             userId: $userId, 
-            onDate: $onDate, 
-            salary: $salary, 
-            currency: $currency, 
+            onDate: Date::fromString($onDate), 
+            salary: Salary::fromValue($salary), 
+            currency: Currency::fromString($currency), 
             note: $note
         );
     }
@@ -49,9 +52,9 @@ final class StoreSalaryHistoryDTO
         return new self(
             id: $id,
             userId: $request->user_id,
-            onDate: $request->on_date,
-            salary: $request->salary,
-            currency: $request->currency,
+            onDate: Date::fromString($request->on_date),
+            salary: Salary::fromValue($request->salary),
+            currency: Currency::fromString($request->currency),
             note: $request->note
         );
     }
@@ -85,9 +88,9 @@ final class StoreSalaryHistoryDTO
         return [
             'id' => $this->id,
             'user_id' => $this->userId,
-            'on_date' => $this->onDate,
-            'salary' => $this->salary,
-            'currency' => $this->currency,
+            'on_date' => $this->onDate->format(),
+            'salary' => $this->salary->toString(),
+            'currency' => $this->currency->toString(),
             'note' => $this->note
         ];
     }

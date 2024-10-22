@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\SalaryHistory;
+namespace Tests\Unit\SalaryHistory\Services;
 
 use Illuminate\Support\Collection;
 use Mockery;
@@ -16,7 +16,7 @@ use Src\SalaryHistory\Domain\ValueObjects\Currency;
 use Src\SalaryHistory\Domain\ValueObjects\Salary;
 use Src\SalaryHistory\Presentation\Requests\GetSalaryHistoryRequest;
 
-class GetSalaryHistoryUnitTest extends TestCase
+class GetServiceUnitTest extends TestCase
 {
     private $salaryHistoryRepository;
 

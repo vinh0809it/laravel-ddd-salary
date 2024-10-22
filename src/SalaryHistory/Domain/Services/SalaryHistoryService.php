@@ -40,7 +40,7 @@ class SalaryHistoryService
 
     /**
      * @param string $userId
-     * @param int $year
+     * @param Date $onDate
      * 
      * @return bool
      */

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\SalaryHistory;
+namespace Tests\Unit\SalaryHistory\Services;
 
 use Illuminate\Foundation\Testing\WithFaker;
 use Mockery;
@@ -16,7 +16,7 @@ use Src\SalaryHistory\Domain\Services\External\IUserDomainService;
 use Src\SalaryHistory\Domain\Services\SalaryHistoryService;
 use Src\SalaryHistory\Domain\ValueObjects\Currency;
 
-class UpdateSalaryHistoryUnitTest extends TestCase
+class UpdateServiceUnitTest extends TestCase
 {
     use WithFaker;
 
@@ -90,7 +90,7 @@ class UpdateSalaryHistoryUnitTest extends TestCase
         $this->assertTrue(true);
     }
 
-    public function test_updateUser_failed(): void
+    public function test_updateSalaryHistory_failed(): void
     {
         // Arrange
         $this->salaryHistoryRepository->shouldReceive('findSalaryHistoryById')

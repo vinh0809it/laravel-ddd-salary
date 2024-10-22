@@ -26,7 +26,6 @@ class SalaryHistoryController extends BaseController
     public function __construct(
         private IAuthorizationService $authorizationService,
         private CommandBus $commandBus,
-        private UpdateSalaryHistoryCommand $updateSalaryHistoryCommand,
         private GetSalaryHistoriesQuery $getSalaryHistoriesQuery
     ) {
 
@@ -103,7 +102,9 @@ class SalaryHistoryController extends BaseController
             $this->authorizationService->authorize('salary_history.update');
 
             $dto = UpdateSalaryHistoryDTO::fromRequest($request, $id);
-            $this->updateSalaryHistoryCommand->execute($dto);
+
+            $command = new UpdateSalaryHistoryCommand($dto);
+            $this->commandBus->dispatch($command);
 
             return $this->sendResponse(
                 result: null, 

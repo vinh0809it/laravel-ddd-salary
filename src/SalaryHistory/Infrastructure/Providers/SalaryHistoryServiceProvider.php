@@ -8,6 +8,8 @@ use Illuminate\Support\ServiceProvider;
 use Src\SalaryHistory\Application\Listeners\CreateSalaryHistoryForUser;
 use Src\SalaryHistory\Application\UseCases\Commands\StoreSalaryHistoryCommand;
 use Src\SalaryHistory\Application\UseCases\CommandHandlers\StoreSalaryHistoryHandler;
+use Src\SalaryHistory\Application\UseCases\CommandHandlers\UpdateSalaryHistoryHandler;
+use Src\SalaryHistory\Application\UseCases\Commands\UpdateSalaryHistoryCommand;
 use Src\SalaryHistory\Infrastructure\Policies\SalaryHistoryPolicy;
 use Src\SalaryHistory\Domain\Repositories\ISalaryHistoryRepository;
 use Src\SalaryHistory\Infrastructure\Repositories\SalaryHistoryRepository;
@@ -37,6 +39,7 @@ class SalaryHistoryServiceProvider extends ServiceProvider
             $bus = new CommandBus();
             
             $bus->register(StoreSalaryHistoryCommand::class, StoreSalaryHistoryHandler::class);
+            $bus->register(UpdateSalaryHistoryCommand::class, UpdateSalaryHistoryHandler::class);
             return $bus;
         });
 

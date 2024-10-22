@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\SalaryHistory;
+namespace Tests\Unit\SalaryHistory\Commands;
 
 use Illuminate\Foundation\Testing\WithFaker;
 use Mockery;

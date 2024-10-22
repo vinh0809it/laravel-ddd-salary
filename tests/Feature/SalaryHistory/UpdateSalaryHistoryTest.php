@@ -3,6 +3,7 @@
 namespace Tests\Feature\SalaryHistory;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Response;
 use Src\SalaryHistory\Infrastructure\EloquentModels\SalaryHistoryEloquentModel;
 use Src\User\Infrastructure\EloquentModels\UserEloquentModel;
@@ -10,11 +11,13 @@ use Tests\TestCase;
 
 class UpdateSalaryHistoryTest extends TestCase
 {
+    use WithFaker;
     use RefreshDatabase;
 
     protected function setUp(): void
     {
         parent::setUp();
+        $this->setUpFaker();
     }
     
     public function test_updateSalaryHistory_successful(): void
@@ -26,8 +29,8 @@ class UpdateSalaryHistoryTest extends TestCase
         $salaryHistory = SalaryHistoryEloquentModel::factory()->create();
 
         $request = [
-            'on_date' => '2024-10-11',
-            'salary' => 10000000,
+            'on_date' => $this->faker->date(),
+            'salary' => $this->faker->randomFloat(1, 10000000),
         ];
 
         // Act

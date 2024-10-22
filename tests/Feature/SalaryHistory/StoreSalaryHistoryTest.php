@@ -86,7 +86,7 @@ class StoreSalaryHistoryTest extends TestCase
             'user_id' => (string)$user->id,
             'on_date' => 'invalid-date',
             'salary' => 'not-a-number',
-            'currency' => 'not-a-number',
+            'currency' => 'not-a-currency',
             'note' => 'Testing'
         ];
 

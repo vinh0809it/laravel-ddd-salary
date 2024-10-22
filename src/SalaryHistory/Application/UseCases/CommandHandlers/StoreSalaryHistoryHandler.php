@@ -2,7 +2,6 @@
 
 namespace Src\SalaryHistory\Application\UseCases\CommandHandlers;
 
-use Carbon\Carbon;
 use Src\SalaryHistory\Application\UseCases\Commands\StoreSalaryHistoryCommand;
 use Src\SalaryHistory\Domain\Entities\SalaryHistory;
 use Src\SalaryHistory\Domain\Exceptions\UserHasSalaryRecordInYearException;

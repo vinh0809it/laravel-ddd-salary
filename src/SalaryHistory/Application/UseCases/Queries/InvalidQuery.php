@@ -2,7 +2,7 @@
 
 namespace Src\SalaryHistory\Application\UseCases\Queries;
 
-use Src\Shared\Domain\IQuery;
+use Src\Shared\Application\IQuery;
 
 class InvalidQuery implements IQuery
 {

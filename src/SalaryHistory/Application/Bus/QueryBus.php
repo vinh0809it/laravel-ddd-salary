@@ -2,8 +2,8 @@
 namespace Src\SalaryHistory\Application\Bus;
 
 use Src\Shared\Application\Exceptions\HandlerNotFoundException;
-use Src\Shared\Domain\IQuery;
-use Src\Shared\Domain\IQueryHandler;
+use Src\Shared\Application\IQuery;
+use Src\Shared\Application\IQueryHandler;
 
 class QueryBus
 {

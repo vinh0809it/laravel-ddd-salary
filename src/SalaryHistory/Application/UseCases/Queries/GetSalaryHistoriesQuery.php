@@ -4,23 +4,13 @@ namespace Src\SalaryHistory\Application\UseCases\Queries;
 
 use Src\Shared\Application\DTOs\PageMetaDTO;
 use Src\SalaryHistory\Application\DTOs\SalaryHistoryFilterDTO;
-use Src\SalaryHistory\Application\DTOs\SalaryHistoryWithPageMetaDTO;
-use Src\SalaryHistory\Domain\Services\SalaryHistoryService;
+use Src\Shared\Domain\IQuery;
 
-class GetSalaryHistoriesQuery
+class GetSalaryHistoriesQuery implements IQuery
 {
-
-    public function __construct(private SalaryHistoryService $salaryHistoryService)
+    public function __construct(
+        public SalaryHistoryFilterDTO $filterDTO,
+        public PageMetaDTO $pageMetaDTO
+    )
     {}
-
-    /**
-     * @param SalaryHistoryFilterDTO $filter
-     * @param PageMetaDTO $pageMetaDTO
-     * 
-     * @return SalaryHistoryWithPageMetaDTO
-     */
-    public function handle(SalaryHistoryFilterDTO $filterDTO, PageMetaDTO $pageMetaDTO): SalaryHistoryWithPageMetaDTO
-    {
-        return $this->salaryHistoryService->getSalaryHistories($filterDTO, $pageMetaDTO);
-    }
 }

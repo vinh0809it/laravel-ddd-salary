@@ -5,7 +5,6 @@ namespace Tests\Feature\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Response;
-use Src\User\Domain\ValueObjects\Email;
 use Src\User\Infrastructure\EloquentModels\UserEloquentModel;
 use Tests\TestCase;
 
@@ -37,7 +36,7 @@ class StoreUserTest extends TestCase
             'email' => $email,
             'is_admin' => $this->faker->boolean(),
             'is_active' => $this->faker->boolean(),
-            'password' => $this->faker->password()
+            'password' => $this->faker->password(8)
         ];
 
         // Act
@@ -74,7 +73,7 @@ class StoreUserTest extends TestCase
             'is_active' => $this->faker->boolean(),
             'password' => $this->faker->password()
         ];
-
+        
         // Act
         $response = $this->postJson(route('users.store'), $request);
         

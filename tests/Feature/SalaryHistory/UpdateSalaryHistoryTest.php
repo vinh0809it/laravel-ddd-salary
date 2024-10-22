@@ -30,7 +30,7 @@ class UpdateSalaryHistoryTest extends TestCase
 
         $request = [
             'on_date' => $this->faker->date(),
-            'salary' => $this->faker->randomFloat(1, 10000000),
+            'salary' => $this->faker->randomFloat(1, 0, 10000000),
         ];
 
         // Act

@@ -5,6 +5,7 @@ namespace Src\SalaryHistory\Presentation;
 use Src\Shared\Presentation\BaseController;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
+use Src\SalaryHistory\Application\Bus\QueryBus;
 use Src\Shared\Application\DTOs\PageMetaDTO;
 use Src\Shared\Domain\Services\IAuthorizationService;
 use Src\SalaryHistory\Application\DTOs\StoreSalaryHistoryDTO;
@@ -14,6 +15,7 @@ use Src\SalaryHistory\Presentation\Requests\StoreSalaryHistoryRequest;
 use Src\SalaryHistory\Application\UseCases\Commands\StoreSalaryHistoryCommand;
 use Src\SalaryHistory\Application\UseCases\Commands\UpdateSalaryHistoryCommand;
 use Src\SalaryHistory\Application\UseCases\Queries\GetSalaryHistoriesQuery;
+use Src\SalaryHistory\Application\UseCases\Queries\InvalidQuery;
 use Src\SalaryHistory\Infrastructure\Buses\CommandBus;
 use Src\SalaryHistory\Presentation\Requests\GetSalaryHistoryRequest;
 use Src\SalaryHistory\Presentation\Requests\UpdateSalaryHistoryRequest;
@@ -26,9 +28,8 @@ class SalaryHistoryController extends BaseController
     public function __construct(
         private IAuthorizationService $authorizationService,
         private CommandBus $commandBus,
-        private GetSalaryHistoriesQuery $getSalaryHistoriesQuery
+        private QueryBus $queryBus,
     ) {
-
         // Pls ignore this auth, I'm not going to implement authentication for this app
         // Just mock it to let the authorizationService work.
         $user = UserEloquentModel::where('is_admin', true)->first();
@@ -51,7 +52,8 @@ class SalaryHistoryController extends BaseController
             $filter = SalaryHistoryFilterDTO::fromRequest($request);
             $pageMeta = PageMetaDTO::fromRequest($request);
 
-            $resultWithPageMeta = $this->getSalaryHistoriesQuery->handle($filter, $pageMeta);
+            $query = new GetSalaryHistoriesQuery($filter, $pageMeta);
+            $resultWithPageMeta = $this->queryBus->dispatch($query);
 
             return $this->sendResponseWithPageMeta(
                 result: $resultWithPageMeta->toResponse()

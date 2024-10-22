@@ -2,8 +2,8 @@
 
 namespace Src\SalaryHistory\Application\UseCases\CommandHandlers;
 
+use Src\SalaryHistory\Application\Mappers\SalaryHistoryMapper;
 use Src\SalaryHistory\Application\UseCases\Commands\StoreSalaryHistoryCommand;
-use Src\SalaryHistory\Domain\Entities\SalaryHistory;
 use Src\SalaryHistory\Domain\Exceptions\UserHasSalaryRecordInYearException;
 use Src\SalaryHistory\Domain\Services\External\IUserDomainService;
 use Src\SalaryHistory\Domain\Services\SalaryHistoryService;
@@ -20,7 +20,7 @@ class StoreSalaryHistoryHandler implements ICommandHandler
     )
     {}
 
-    public function handle(ICommand $command): SalaryHistory
+    public function handle(ICommand $command): array
     {
         if (!$command instanceof StoreSalaryHistoryCommand) {
             throw new InvalidQueryProvided();
@@ -36,6 +36,7 @@ class StoreSalaryHistoryHandler implements ICommandHandler
             throw new UserHasSalaryRecordInYearException();
         }
        
-        return $this->salaryHistoryService->storeSalaryHistory($dto);
+        $salaryHistory = $this->salaryHistoryService->storeSalaryHistory($dto);
+        return SalaryHistoryMapper::toResponse($salaryHistory);
     }
 }

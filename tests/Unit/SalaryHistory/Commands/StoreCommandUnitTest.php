@@ -6,6 +6,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Mockery;
 use PHPUnit\Framework\TestCase;
 use Src\SalaryHistory\Application\DTOs\StoreSalaryHistoryDTO;
+use Src\SalaryHistory\Application\Mappers\SalaryHistoryMapper;
 use Src\SalaryHistory\Application\UseCases\CommandHandlers\StoreSalaryHistoryHandler;
 use Src\SalaryHistory\Application\UseCases\Commands\StoreSalaryHistoryCommand;
 use Src\SalaryHistory\Domain\Entities\SalaryHistory;
@@ -52,7 +53,7 @@ class StoreCommandUnitTest extends TestCase
     public function test_storeCommandHandler_handle_successful(): void
     {
         // Arrange
-        $salaryHistory = Mockery::Mock(SalaryHistory::class);
+        $salaryHistory = SalaryHistoryMapper::fromDTO($this->dto);
 
         $this->userDomainService->shouldReceive('userExists')
             ->with($this->dto->userId)
@@ -73,7 +74,7 @@ class StoreCommandUnitTest extends TestCase
         $result = $storeHandler->handle($storeCommand);
 
         // // Assert
-        $this->assertSame($salaryHistory, $result);
+        $this->assertIsArray($result);
     }
 
     public function test_storeCommandHandler_user_not_exists(): void

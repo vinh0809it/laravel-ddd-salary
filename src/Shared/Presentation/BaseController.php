@@ -1,7 +1,6 @@
 <?php
 namespace Src\Shared\Presentation;
 
-use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Src\Shared\Domain\Exceptions\DomainException;

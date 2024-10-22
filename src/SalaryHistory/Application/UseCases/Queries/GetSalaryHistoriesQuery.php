@@ -4,7 +4,7 @@ namespace Src\SalaryHistory\Application\UseCases\Queries;
 
 use Src\Shared\Application\DTOs\PageMetaDTO;
 use Src\SalaryHistory\Application\DTOs\SalaryHistoryFilterDTO;
-use Src\Shared\Domain\IQuery;
+use Src\Shared\Application\IQuery;
 
 class GetSalaryHistoriesQuery implements IQuery
 {

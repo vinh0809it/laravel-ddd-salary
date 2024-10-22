@@ -1,6 +1,6 @@
 <?php
 
-namespace Src\Shared\Domain;
+namespace Src\Shared\Application;
 
 interface IQueryHandler
 {

@@ -8,8 +8,8 @@ use Src\SalaryHistory\Application\DTOs\SalaryHistoryWithPageMetaDTO;
 use Src\SalaryHistory\Application\UseCases\Queries\GetSalaryHistoriesQuery;
 use Src\SalaryHistory\Domain\Services\SalaryHistoryService;
 use Src\Shared\Application\Exceptions\InvalidQueryProvided;
-use Src\Shared\Domain\IQuery;
-use Src\Shared\Domain\IQueryHandler;
+use Src\Shared\Application\IQuery;
+use Src\Shared\Application\IQueryHandler;
 
 class GetSalaryHistoriesQueryHandler implements IQueryHandler
 {

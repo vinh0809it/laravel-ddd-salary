@@ -7,9 +7,12 @@ use Src\SalaryHistory\Domain\Entities\SalaryHistory;
 use Src\SalaryHistory\Domain\Exceptions\UserHasSalaryRecordInYearException;
 use Src\SalaryHistory\Domain\Services\External\IUserDomainService;
 use Src\SalaryHistory\Domain\Services\SalaryHistoryService;
+use Src\Shared\Application\Exceptions\InvalidQueryProvided;
+use Src\Shared\Application\ICommand;
+use Src\Shared\Application\ICommandHandler;
 use Src\Shared\Domain\Exceptions\EntityNotFoundException;
 
-class StoreSalaryHistoryHandler
+class StoreSalaryHistoryHandler implements ICommandHandler
 {
     public function __construct(
         private SalaryHistoryService $salaryHistoryService,
@@ -17,8 +20,12 @@ class StoreSalaryHistoryHandler
     )
     {}
 
-    public function handle(StoreSalaryHistoryCommand $command): SalaryHistory
+    public function handle(ICommand $command): SalaryHistory
     {
+        if (!$command instanceof StoreSalaryHistoryCommand) {
+            throw new InvalidQueryProvided();
+        }
+
         $dto = $command->dto;
        
         if(!$this->userDomainService->userExists($dto->userId)) {

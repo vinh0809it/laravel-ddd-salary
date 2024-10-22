@@ -3,9 +3,10 @@ namespace Src\SalaryHistory\Application\Bus;
 
 use Src\Shared\Application\Exceptions\HandlerNotFoundException;
 use Src\Shared\Application\IQuery;
+use Src\Shared\Application\IQueryBus;
 use Src\Shared\Application\IQueryHandler;
 
-class QueryBus
+class QueryBus implements IQueryBus
 {
     private array $handlers = [];
 

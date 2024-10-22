@@ -18,8 +18,7 @@ use Src\SalaryHistory\Domain\Repositories\ISalaryHistoryRepository;
 use Src\SalaryHistory\Infrastructure\Repositories\SalaryHistoryRepository;
 use Src\SalaryHistory\Domain\Rules\UserExistsRule;
 use Src\SalaryHistory\Domain\Services\External\IUserDomainService;
-use Src\SalaryHistory\Domain\Services\SalaryHistoryService;
-use Src\SalaryHistory\Infrastructure\Buses\CommandBus;
+use Src\SalaryHistory\Application\Bus\CommandBus;
 use Src\SalaryHistory\Infrastructure\Services\UserDomainService;
 use Src\User\Domain\Events\StoreUserEvent;
 
@@ -42,8 +41,16 @@ class SalaryHistoryServiceProvider extends ServiceProvider
         $this->app->singleton(CommandBus::class, function ($app) {
             $commandBus = new CommandBus();
             
-            $commandBus->register(StoreSalaryHistoryCommand::class, StoreSalaryHistoryHandler::class);
-            $commandBus->register(UpdateSalaryHistoryCommand::class, UpdateSalaryHistoryHandler::class);
+            $commandBus->register(
+                StoreSalaryHistoryCommand::class, 
+                $app->make(StoreSalaryHistoryHandler::class)
+            );
+
+            $commandBus->register(
+                UpdateSalaryHistoryCommand::class, 
+                $app->make(UpdateSalaryHistoryHandler::class)
+            );
+            
             return $commandBus;
         });
 
@@ -53,7 +60,7 @@ class SalaryHistoryServiceProvider extends ServiceProvider
     
             $queryBus->register(
                 GetSalaryHistoriesQuery::class, 
-                new GetSalaryHistoriesQueryHandler($app->make(SalaryHistoryService::class))
+                $app->make(GetSalaryHistoriesQueryHandler::class)
             );
             
             return $queryBus;

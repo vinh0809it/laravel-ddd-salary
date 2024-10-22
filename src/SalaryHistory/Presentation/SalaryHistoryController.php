@@ -15,7 +15,7 @@ use Src\SalaryHistory\Presentation\Requests\StoreSalaryHistoryRequest;
 use Src\SalaryHistory\Application\UseCases\Commands\StoreSalaryHistoryCommand;
 use Src\SalaryHistory\Application\UseCases\Commands\UpdateSalaryHistoryCommand;
 use Src\SalaryHistory\Application\UseCases\Queries\GetSalaryHistoriesQuery;
-use Src\SalaryHistory\Infrastructure\Buses\CommandBus;
+use Src\SalaryHistory\Application\Bus\CommandBus;
 use Src\SalaryHistory\Presentation\Requests\GetSalaryHistoryRequest;
 use Src\SalaryHistory\Presentation\Requests\UpdateSalaryHistoryRequest;
 use Src\User\Infrastructure\EloquentModels\UserEloquentModel;

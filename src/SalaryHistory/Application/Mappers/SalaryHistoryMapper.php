@@ -60,24 +60,32 @@ class SalaryHistoryMapper
     }
 
     /**
-     * @param mixed $entities
+     * @param Collection $salaryHistories
      * 
      * @return array
      */
-    public static function toResponse(mixed $entities): array
+    public static function toMultiResponse(Collection $salaryHistories): array
     {
-        $collection = $entities instanceof Collection ? $entities : collect([$entities]);
-       
-        return $collection->map(function (SalaryHistory $entity) {
-            return [
-                'id' => $entity->getId(),
-                'user_id' => $entity->getUserId(),
-                'on_date' => $entity->getOnDate()->format(),
-                'salary' => $entity->getSalary()->toString(),
-                'currency' => $entity->getCurrency()->toString(),
-                'note' => $entity->getNote(),
-            ];
+        return $salaryHistories->map(function (SalaryHistory $entity) {
+            return $this->toSingleResponse($entity);
         })->toArray();
+    }
+
+    /**
+     * @param SalaryHistory $salaryHistory
+     * 
+     * @return array
+     */
+    public static function toSingleResponse(SalaryHistory $salaryHistory): array
+    {
+        return [
+            'id' => $salaryHistory->getId(),
+            'user_id' => $salaryHistory->getUserId(),
+            'on_date' => $salaryHistory->getOnDate()->format(),
+            'salary' => $salaryHistory->getSalary()->toString(),
+            'currency' => $salaryHistory->getCurrency()->toString(),
+            'note' => $salaryHistory->getNote(),
+        ];
     }
 
     /**

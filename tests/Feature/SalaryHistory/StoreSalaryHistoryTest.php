@@ -5,7 +5,6 @@ namespace Tests\Feature\SalaryHistory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Log;
 use Src\User\Infrastructure\EloquentModels\UserEloquentModel;
 use Tests\TestCase;
 
@@ -46,13 +45,13 @@ class StoreSalaryHistoryTest extends TestCase
         $this->assertDatabaseHas('salary_histories', $request);
 
         $response->assertJsonStructure([
-            'data' => [[
+            'data' => [
                 'id',
                 'user_id',
                 'on_date',
                 'salary',
                 'note',
-            ]]
+            ]
         ]);
     }
 

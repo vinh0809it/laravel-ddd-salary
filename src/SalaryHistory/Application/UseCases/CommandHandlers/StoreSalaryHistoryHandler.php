@@ -37,6 +37,6 @@ class StoreSalaryHistoryHandler implements ICommandHandler
         }
        
         $salaryHistory = $this->salaryHistoryService->storeSalaryHistory($dto);
-        return SalaryHistoryMapper::toResponse($salaryHistory);
+        return SalaryHistoryMapper::toSingleResponse($salaryHistory);
     }
 }

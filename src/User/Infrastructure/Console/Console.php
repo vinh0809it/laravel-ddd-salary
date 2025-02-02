@@ -1,10 +1,9 @@
 <?php
-
-namespace Src\Shared\Infrastructure\Laravel\Kernel;
+namespace Src\User\Infrastructure\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
-use Src\User\Infrastructure\Console\Console as UserConsole;
+
 class Console extends ConsoleKernel
 {
     /**
@@ -12,7 +11,7 @@ class Console extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        (new UserConsole($this->app, $this->events))->schedule($schedule);
+        $schedule->command('send-email-birthday')->daily();
     }
 
     /**
@@ -20,7 +19,6 @@ class Console extends ConsoleKernel
      */
     protected function commands(): void
     {
-        (new UserConsole($this->app, $this->events))->commands();
+        $this->load(base_path('src/User/Presentation/CLI'));
     }
-   
 }

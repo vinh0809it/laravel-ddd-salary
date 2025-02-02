@@ -2,6 +2,7 @@
 
 namespace Src\User\Infrastructure\Repositories;
 
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Src\User\Domain\Factories\UserFactory;
 use Src\Shared\Infrastructure\BaseRepository;
@@ -73,5 +74,12 @@ class UserRepository extends BaseRepository implements IUserRepository
     public function deleteUser(string $id): void
     {
         $this->model->find($id)->delete();
+    }
+
+    public function getUsersHaveBirthdayAt(Carbon $date): array
+    {
+        return $this->model->whereDate('birthday', $date)->get()->map(function ($eloquent) {
+            return $this->userFactory->fromEloquent($eloquent);
+        })->toArray();
     }
 }

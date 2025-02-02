@@ -41,6 +41,8 @@ $app->singleton(
     \Src\Shared\Infrastructure\Laravel\Exceptions\Handler::class
 );
 
+$app->useAppPath(dirname(__DIR__) . '\src');
+
 /*
 |--------------------------------------------------------------------------
 | Return The Application

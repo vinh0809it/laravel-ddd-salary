@@ -2,6 +2,7 @@
 
 namespace Src\User\Domain\Services;
 
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Src\Shared\Domain\Exceptions\DatabaseException;
 use Src\Shared\Domain\Exceptions\EntityNotFoundException;
@@ -20,6 +21,12 @@ class UserService
         private IUserRepository $userRepository
     ) {}
 
+    /**
+     * @param string|null $email
+     * @param string|null $name
+     * 
+     * @return Collection
+     */
     public function getUsers(string $email = null, string $name = null): Collection
     {
         try {
@@ -29,11 +36,21 @@ class UserService
         }
     }
 
+    /**
+     * @param string $id
+     * 
+     * @return bool
+     */
     public function userExists(string $id): bool
     {
         return $this->userRepository->exists($id);
     }
 
+    /**
+     * @param string $id
+     * 
+     * @return void
+     */
     public function deleteUser(string $id): void
     {
         if(!$this->userRepository->exists($id)) {
@@ -48,6 +65,11 @@ class UserService
         }
     }
 
+    /**
+     * @param UserDTO $userDTO
+     * 
+     * @return [type]
+     */
     public function storeUser(UserDTO $userDTO)
     {
         $user = $this->userFactory->fromDTO($userDTO);
@@ -59,6 +81,11 @@ class UserService
         }
     }
 
+    /**
+     * @param UserDTO $userDTO
+     * 
+     * @return void
+     */
     public function updateUser(UserDTO $userDTO): void
     {
         $existingUser = $this->getExistingUser($userDTO->id);
@@ -79,6 +106,11 @@ class UserService
         }
     }
 
+    /**
+     * @param string $userId
+     * 
+     * @return User
+     */
     public function getExistingUser(string $userId): User
     {
         try {
@@ -92,5 +124,10 @@ class UserService
         }
 
         return $existingUser;
+    }
+
+    public function getUsersHaveBirthdayAt(Carbon $date): array
+    {
+        return $this->userRepository->getUsersHaveBirthdayAt($date);
     }
 }

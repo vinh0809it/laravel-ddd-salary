@@ -175,6 +175,7 @@ return [
         
         //  Shared
         \Src\Shared\Infrastructure\Providers\AuthorizationServiceProvider::class,
+        \Src\Shared\Infrastructure\Providers\EventServiceProvider::class,
 
         // User
         \Src\User\Infrastructure\Providers\UserServiceProvider::class,

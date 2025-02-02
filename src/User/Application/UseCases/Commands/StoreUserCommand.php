@@ -2,6 +2,7 @@
 
 namespace Src\User\Application\UseCases\Commands;
 
+use Src\Shared\Domain\DomainEventDispatcher;
 use Src\User\Domain\Entities\User;
 use Src\User\Application\DTOs\UserDTO;
 use Src\User\Domain\Events\StoreUserEvent;
@@ -11,14 +12,14 @@ class StoreUserCommand
 {
     public function __construct(
         private UserService $userService,
+        private DomainEventDispatcher $domainEventDispatcher
     )
     {}
 
     public function execute(UserDTO $userDTO): User
     {
         $userEntity = $this->userService->storeUser($userDTO);
-        event(new StoreUserEvent($userEntity->id));
-
+        $this->domainEventDispatcher->dispatch(new StoreUserEvent($userEntity->id));
         return $userEntity;
     }
 }
